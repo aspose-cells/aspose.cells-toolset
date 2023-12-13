@@ -20,6 +20,12 @@ class CellsExportUtility(object):
         pass
 
     def export_data(self, workbook , **kwargs):
+        """
+        Export worksheet data from a workbook.
+        :param Workbook workbook: (required)
+        :param int sheet_index: The worksheet index indicates the position in the exported data workbook.  (required)
+        :return list data: 
+        """             
         self.__init_parameters(**kwargs)
 
         if self.sheet_index is None:
@@ -45,15 +51,52 @@ class CellsExportUtility(object):
         pass
     
     def export_worksheet(self, workbook : Workbook , sheet_index : int) -> list :
+        """
+        Export worksheet data from a workbook.
+        :param Workbook workbook: (required)
+        :param int sheet_index: The worksheet index indicates the position in the exported data workbook.  (required)
+        :return list data: 
+        """            
         return self.__export_worksheet(workbook.worksheets[sheet_index])
     
     def export_worksheet(self, worksheet : Worksheet) -> list :
+        """
+        Export worksheet data from a file.
+        :param Worksheet worksheet:  (required)
+        :return list data: 
+        """          
         return self.__export_worksheet(worksheet)
     
     def export_list_object(self, workbook : Workbook , sheet_index : int, list_object_index : int ) -> list :
-        return self.__export_list_object(workbook.worksheets[sheet_index],list_object_index)
+        """
+        Export list object data from a file.
+        :param str path: The file path. (required)
+        :param int sheet_index: The worksheet index indicates the position in the exported data workbook.  (required)
+        :param int list_object_index: The list object index indicates the position in the exported data workbook.  (required)
+        :return list data: 
+        """            
+        return self.__export_pivot_table(workbook.worksheets[sheet_index],list_object_index)
     
-
+    def export_range(self, workbook : Workbook , sheet_index : int, range_name : str ) -> list :
+        """
+        Export range data from a workbook.
+        :param Workbook workbook: . (required)
+        :param int sheet_index: The worksheet index indicates the position in the exported data workbook.  (required)
+        :param int range_name: The range name indicates the position in the exported data workbook.  (required)
+        :return list data: 
+        """            
+        return self.__export_range(workbook.worksheets[sheet_index],range_name)
+   
+    def export_pivot_table(self, workbook : Workbook , sheet_index : int, pivot_table_index : int ) -> list :
+        """
+        Export pivot table data from a file.
+        :param str path: The file path. (required)
+        :param int sheet_index: The worksheet index indicates the position in the exported data workbook.  (required)
+        :param int pivot_table_index: The list object index indicates the position in the exported data workbook.  (required)
+        :return list data: 
+        """            
+        return self.__export_list_object(workbook.worksheets[sheet_index],pivot_table_index)
+    
     def __init_parameters(self, **kwargs):
         # parameter initialize
         if kwargs.get("sheet_index") is not None:
@@ -139,11 +182,20 @@ class CellsExportUtility(object):
     def __export_chart(self, worksheet , chart_index):
         chart = worksheet.charts[chart_index]
         category_data = chart.n_series.category_data
+        pos = category_data.find(":")
+        temp_rows = []
+        temp_columns = []
+        CellsHelper.cell_name_to_index(category_data[0:pos], temp_rows,temp_columns)
+        begin_row_index = temp_rows[0]
+        begin_column_index = temp_columns[0]
+        CellsHelper.cell_name_to_index(category_data[pos+1:], temp_rows,temp_columns)
+        end_row_index = temp_rows[0]
+        end_column_index = temp_columns[0]
         cells = worksheet.cells
         table =[]
-        for row_index in range(cellarea.start_row , cellarea.end_row):
+        for row_index in range(begin_row_index , end_row_index):
             row  =[]            
-            for column_index in range(cellarea.start_column, cellarea.end_column):
+            for column_index in range(begin_column_index, end_column_index):
                 row.append(  cells.get(row_index,column_index).value)
             table.append(row)
         return table    
