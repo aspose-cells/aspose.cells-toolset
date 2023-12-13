@@ -11,7 +11,7 @@ sys.path.append(ABSPATH)
 
 from asposecellstoolset import CellsImportUtility
 from aspose.cells import Workbook 
-
+from asposecellstoolset.CellsToolset import import_ndarray_into_file
 class TestImportNumArrayData( unittest.TestCase):
     
     def setUp(self):
@@ -19,6 +19,11 @@ class TestImportNumArrayData( unittest.TestCase):
     
     def tearDown(self):
         pass
+
+    def test_import_row_data_vertical_function(self):
+        data = np.array([1,2,3,4,5,6,7,8,9])
+        import_ndarray_into_file("D:/cells-toolset/TestData/Output/import_numarray_int_vertical.xlsx",data,0,0,0,True,one_sheet =True  )
+        pass    
     
     def test_import_row_data_vertical(self):
         
@@ -27,7 +32,7 @@ class TestImportNumArrayData( unittest.TestCase):
         data = np.array([1,2,3,4,5,6,7,8,9])
        
         import_tool.import_data_into_workbook( workbook ,data, is_vertical=True)
-        workbook.save("D:/Cells.Toolset/TestData/Output/import_numarray_int_vertical.xlsx")
+        workbook.save("D:/cells-toolset/TestData/Output/import_numarray_int_vertical.xlsx")
         pass
     
     def test_import_row_data_horizontal(self):
@@ -36,7 +41,7 @@ class TestImportNumArrayData( unittest.TestCase):
         workbook = Workbook()
         data = np.array([1,2,3,4,5,6,7,8,9])
         import_tool.import_data_into_workbook( workbook ,data, is_vertical=False)
-        workbook.save("D:/Cells.Toolset/TestData/Output/import_numarray_int_horizontal.xlsx")
+        workbook.save("D:/cells-toolset/TestData/Output/import_numarray_int_horizontal.xlsx")
         pass    
 
     def test_import_table_data_horizontal(self):        
@@ -44,7 +49,7 @@ class TestImportNumArrayData( unittest.TestCase):
         workbook = Workbook()
         data = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         import_tool.import_data_into_workbook( workbook ,data, is_vertical=False)
-        workbook.save("D:/Cells.Toolset/TestData/Output/import_numarray_int_table_horizontal.xlsx")
+        workbook.save("D:/cells-toolset/TestData/Output/import_numarray_int_table_horizontal.xlsx")
         pass        
     
     def test_import_table_data_vertical(self):        
@@ -52,7 +57,7 @@ class TestImportNumArrayData( unittest.TestCase):
         workbook = Workbook()
         data = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
         import_tool.import_data_into_workbook( workbook ,data, is_vertical=True)
-        workbook.save("D:/Cells.Toolset/TestData/Output/import_numarray_int_table_vertical.xlsx")
+        workbook.save("D:/cells-toolset/TestData/Output/import_numarray_int_table_vertical.xlsx")
         pass        
     
     def test_import_tables_data_horizontal(self):        
@@ -60,7 +65,7 @@ class TestImportNumArrayData( unittest.TestCase):
         workbook = Workbook()
         data = np.array([[[1, 2, 3], [1, 2, 3], [1, 2, 3]], [[4, 5, 6], [4, 5, 6], [4, 5, 6]], [[7, 8, 9], [7, 8, 9], [7, 8, 9]]])
         import_tool.import_data_into_workbook( workbook ,data, is_vertical=False)
-        workbook.save("D:/Cells.Toolset/TestData/Output/import_numarray_tables_horizontal.xlsx")
+        workbook.save("D:/cells-toolset/TestData/Output/import_numarray_tables_horizontal.xlsx")
         pass  
 
     def test_import_tables_data_vertical(self):        
@@ -68,7 +73,7 @@ class TestImportNumArrayData( unittest.TestCase):
         workbook = Workbook()
         data = np.array([[[1, 2, 3], [1, 2, 3], [1, 2, 3]], [[4, 5, 6], [4, 5, 6], [4, 5, 6]], [[7, 8, 9], [7, 8, 9], [7, 8, 9]]])
         import_tool.import_data_into_workbook( workbook ,data, is_vertical=True)
-        workbook.save("D:/Cells.Toolset/TestData/Output/import_numarray_tables_vertical.xlsx")
+        workbook.save("D:/cells-toolset/TestData/Output/import_numarray_tables_vertical.xlsx")
         
         pass  
     
@@ -77,7 +82,7 @@ class TestImportNumArrayData( unittest.TestCase):
         workbook = Workbook()
         data = np.array([[[1, 2, 3], [1, 2, 3], [1, 2, 3]], [[4, 5, 6], [4, 5, 6], [4, 5, 6]], [[7, 8, 9], [7, 8, 9], [7, 8, 9]]])
         import_tool.import_data_into_workbook( workbook ,data, is_vertical=False,one_sheet=True)
-        workbook.save("D:/Cells.Toolset/TestData/Output/import_numarray_tables_horizontal_one_sheet.xlsx")
+        workbook.save("D:/cells-toolset/TestData/Output/import_numarray_tables_horizontal_one_sheet.xlsx")
         pass  
 
     def test_import_tables_data_vertical_one_sheet(self):        
@@ -85,7 +90,7 @@ class TestImportNumArrayData( unittest.TestCase):
         workbook = Workbook()
         data = np.array([[[1, 2, 3], [1, 2, 3], [1, 2, 3]], [[4, 5, 6], [4, 5, 6], [4, 5, 6]], [[7, 8, 9], [7, 8, 9], [7, 8, 9]]])
         import_tool.import_data_into_workbook( workbook ,data, is_vertical=True,one_sheet=True)
-        workbook.save("D:/Cells.Toolset/TestData/Output/import_numarray_tables_vertical_one_sheet.xlsx")
+        workbook.save("D:/cells-toolset/TestData/Output/import_numarray_tables_vertical_one_sheet.xlsx")
         
         pass  
 

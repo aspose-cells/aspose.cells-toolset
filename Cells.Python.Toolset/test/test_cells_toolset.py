@@ -24,7 +24,7 @@ class TestCellsToolset( unittest.TestCase):
     
     def test_import_data(self):       
         data = np.array(["row","column","table","range","shape","workbook","worksheet","cells","picture"])
-        import_data_into_file( "ImportNDArray.xlsx",data )
+        import_data_into_file( "D:/cells-toolset/TestData/Output/ImportNDArray.xlsx",data )
         pass
         
 if __name__ == '__main__':

@@ -1,5 +1,7 @@
 from __future__ import absolute_import
+from xmlrpc.client import boolean
 from aspose.cells import Workbook
+from aspose.cells import Cells
 import numpy as np
 import pandas as pd
 import datetime
@@ -14,7 +16,18 @@ class CellsImportUtility(object):
         self.one_sheet = False
         pass
     
-    def import_data_into_workbook(self , workbook, data , **kwargs):
+    def import_data_into_workbook(self , workbook : Workbook, data , **kwargs):
+        """
+        Import various types of data into a workbook using different methods.
+        :param Workbook workbook: The object into which the data is importe. (required)
+        :param any data: Imported data, which can be in the form of ndarray, tuple, list, set, DataFrame, dict, or other data. (required)
+        :param int sheet_index: The worksheet index indicating the position in the imported data workbook. The default value is active sheet index. (optional)
+        :param int row_index: The row index of worksheet indicating the position in the imported data workbook. The default value is 0.(optional)
+        :param int column_index: The column index of worksheet indicating the position in the imported data workbook. The default value is 0.(optional)
+        :param bool is_vertical: Indicate whether the data is inserted vertically. The default value is False. (optional)
+        :param bool one_sheet: Indicates whether the data is inserted into a table. "The default value is False."(optional)
+        :return: 
+        """
         self.__init_parameters(**kwargs)
         #
         if self.sheet_index is None:
@@ -37,6 +50,66 @@ class CellsImportUtility(object):
             self.__put_value_to_cell(cells, data, row, column)
         pass
     
+    def import_ndarray_into_workbook(self , cells : Cells , data : np.ndarray ,row : int ,column :int,is_vertical: bool):
+        """
+        Import ndarray data into a workbook.
+        :param Cells cells: The object into which the data is importe. (required)
+        :param ndarray data: Imported ndarray data. (required)
+        :param int sheet_index: The worksheet index indicating the position in the imported data workbook. The default value is active sheet index. (optional)
+        :param int row_index: The row index of worksheet indicating the position in the imported data workbook. The default value is 0.(optional)
+        :param int column_index: The column index of worksheet indicating the position in the imported data workbook. The default value is 0.(optional)
+        :param bool is_vertical: Indicate whether the data is inserted vertically. The default value is False. (optional)
+        :param bool one_sheet: Indicates whether the data is inserted into a table. "The default value is False."(optional)
+        :return: 
+        """
+        self.__import_ndarray_into_workbook (cells,data,row,column,is_vertical)
+        pass
+    
+    def import_dict_into_workbook(self , cells : Cells , data : dict , row : int ,column :int, is_vertical: bool):
+        """
+        Import dict data into a workbook.
+        :param Cells cells: The object into which the data is importe. (required)
+        :param dict data: Imported dict data. (required)
+        :param int sheet_index: The worksheet index indicating the position in the imported data workbook. The default value is active sheet index. (optional)
+        :param int row_index: The row index of worksheet indicating the position in the imported data workbook. The default value is 0.(optional)
+        :param int column_index: The column index of worksheet indicating the position in the imported data workbook. The default value is 0.(optional)
+        :param bool is_vertical: Indicate whether the data is inserted vertically. The default value is False. (optional)
+        :param bool one_sheet: Indicates whether the data is inserted into a table. "The default value is False."(optional)
+        :return: 
+        """
+        self.__import_dict_data_into_workbook (cells,data,row,column,is_vertical)
+        pass    
+
+    def import_dataframe_into_workbook(self , cells : Cells , data : pd.DataFrame , row : int ,column :int, is_vertical: bool):
+        """
+        Import dataframe data into a workbook.
+        :param Cells cells: The object into which the data is importe. (required)
+        :param dataframe data: Imported dataframe data. (required)
+        :param int sheet_index: The worksheet index indicating the position in the imported data workbook. The default value is active sheet index. (optional)
+        :param int row_index: The row index of worksheet indicating the position in the imported data workbook. The default value is 0.(optional)
+        :param int column_index: The column index of worksheet indicating the position in the imported data workbook. The default value is 0.(optional)
+        :param bool is_vertical: Indicate whether the data is inserted vertically. The default value is False. (optional)
+        :param bool one_sheet: Indicates whether the data is inserted into a table. "The default value is False."(optional)
+        :return: 
+        """
+        self.__import_dataframe_into_workbook (cells,data,row,column,is_vertical)
+        pass
+    
+    def import_aggregate_data_into_workbook(self , cells : Cells , data : tuple or list or set , row : int ,column :int, is_vertical: bool):
+        """
+        Import data into a workbook.
+        :param Cells cells: The object into which the data is importe. (required)
+        :param data: Imported data. (required)
+        :param int sheet_index: The worksheet index indicating the position in the imported data workbook. The default value is active sheet index. (optional)
+        :param int row_index: The row index of worksheet indicating the position in the imported data workbook. The default value is 0.(optional)
+        :param int column_index: The column index of worksheet indicating the position in the imported data workbook. The default value is 0.(optional)
+        :param bool is_vertical: Indicate whether the data is inserted vertically. The default value is False. (optional)
+        :param bool one_sheet: Indicates whether the data is inserted into a table. "The default value is False."(optional)
+        :return: 
+        """
+        self.__import_data_into_workbook(cells,data,row,column,is_vertical)
+        pass
+
     def __init_parameters(self, **kwargs):
         # parameter initialize
         if kwargs.get("sheet_index") is not None:

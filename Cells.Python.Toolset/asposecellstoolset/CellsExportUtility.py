@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 from aspose.cells import Workbook
+from aspose.cells import Worksheet
+from aspose.cells.tables import ListObject
 from aspose.cells import CellsHelper
 import numpy as np
 import pandas as pd
@@ -39,10 +41,19 @@ class CellsExportUtility(object):
             return self.__export_range(workbook.worksheets[self.sheet_index], self.range_name)
             pass
 
-        return self.__export_worksheet(workbook.worksheets[self.sheet_index])
-    
+        return self.__export_worksheet(workbook.worksheets[self.sheet_index])    
         pass
     
+    def export_worksheet(self, workbook : Workbook , sheet_index : int) -> list :
+        return self.__export_worksheet(workbook.worksheets[sheet_index])
+    
+    def export_worksheet(self, worksheet : Worksheet) -> list :
+        return self.__export_worksheet(worksheet)
+    
+    def export_list_object(self, workbook : Workbook , sheet_index : int, list_object_index : int ) -> list :
+        return self.__export_list_object(workbook.worksheets[sheet_index],list_object_index)
+    
+
     def __init_parameters(self, **kwargs):
         # parameter initialize
         if kwargs.get("sheet_index") is not None:

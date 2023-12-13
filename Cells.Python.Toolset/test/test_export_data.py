@@ -24,31 +24,31 @@ class TestExportData( unittest.TestCase):
         pass
     
     def test_export_range(self):       
-        print("test_export_range")
-        exported_data =export_range_data( "D:\Cells.Toolset\TestData\Input\ExportData.xlsx" , 0 ,"C5:H18")
-        print( np.array( exported_data))
-        print( pd.DataFrame(exported_data))
+        # print("test_export_range")
+        exported_data =export_range_data( "d:\cells-toolset\TestData\Input\ExportData.xlsx" , 0 ,"C5:H18")
+        # print( np.array( exported_data))
+        # print( pd.DataFrame(exported_data))
         pass
     
     def test_export_list_object(self):       
-        print("test_export_list_object")
-        exported_data =export_list_object_data( "D:\Cells.Toolset\TestData\Input\ExportData.xlsx" , 1, 0 )
-        print( np.array( exported_data))
-        print( pd.DataFrame(exported_data))
+        # print("test_export_list_object")
+        exported_data =export_list_object_data( "d:\cells-toolset\TestData\Input\ExportData.xlsx" , 1, 0 )
+        # print( np.array( exported_data))
+        # print( pd.DataFrame(exported_data))
         pass
     
     def test_export_pivot_table(self):       
-        print("test_export_pivot_table")
-        exported_data =export_pivot_table_data( "D:\Cells.Toolset\TestData\Input\ExportData.xlsx" , 3, 0 )
-        print( np.array( exported_data))
-        print( pd.DataFrame(exported_data))
+        # print("test_export_pivot_table")
+        exported_data =export_pivot_table_data( "d:\cells-toolset\TestData\Input\ExportData.xlsx" , 3, 0 )
+        # print( np.array( exported_data))
+        # print( pd.DataFrame(exported_data))
         pass
 
     def test_export_data(self):   
-        print("test_export_data")
-        exported_data =export_worksheet_data( "D:\Cells.Toolset\TestData\Input\ExportData.xlsx" , 0 )
-        print( np.array( exported_data))
-        print( pd.DataFrame(exported_data))
+        # print("test_export_data")
+        exported_data =export_worksheet_data( "d:\cells-toolset\TestData\Input\ExportData.xlsx" , 0 )
+        # print( np.array( exported_data))
+        # print( pd.DataFrame(exported_data))
         pass
         
 if __name__ == '__main__':
