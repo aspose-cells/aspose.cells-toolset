@@ -138,6 +138,19 @@ def export_list_object_data(path : str , sheet_index : int, list_object_index : 
     return export_tool.export_data( workbook ,sheet_index=sheet_index,list_object_index=list_object_index)
     pass
 
+def export_list_object_data_to_dataframe(path : str , sheet_index : int, list_object_index : int) -> pd.DataFrame :
+    """
+    Export list object data from a file.
+    :param str path: The file path. (required)
+    :param int sheet_index: The worksheet index indicates the position in the exported data workbook.  (required)
+    :param int list_object_index: The list object index indicates the position in the exported data workbook.  (required)
+    :return list data: 
+    """    
+    workbook = Workbook(path)
+    export_tool = CellsExportUtility()    
+    return pd.DataFrame( export_tool.export_data( workbook ,sheet_index=sheet_index,list_object_index=list_object_index))
+
+    pass
 def export_pivot_table_data(path : str , sheet_index : int, pivot_table_index : int) -> list:
     """
     Export pivot table data from a file.
