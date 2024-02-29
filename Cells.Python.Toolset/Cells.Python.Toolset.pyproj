@@ -26,6 +26,7 @@
     <Compile Include="asposecellstoolset\CellsExportUtility.py" />
     <Compile Include="asposecellstoolset\CellsImportUtility.py" />
     <Compile Include="asposecellstoolset\CellsToolset.py" />
+    <Compile Include="asposecellstoolset\DataProcessing.py" />
     <Compile Include="asposecellstoolset\__init__.py" />
     <Compile Include="test\run_test.py" />
     <Compile Include="test\test_cells.py" />
