@@ -1,8 +1,8 @@
-from xmlrpc.client import Boolean
 from aspose.cells import Workbook
 from aspose.cells import Worksheet
 from aspose.cells import FileFormatType
 from aspose.cells import CellValueType
+from aspose.cells import Cell
 
 class DataProcessing(object):
     
@@ -23,9 +23,6 @@ class DataProcessing(object):
             for sheet in workbook.worksheets:
                 sheet.cells.remove_duplicates()
         else :            
-            for namerange in workbook.worksheets.get_named_ranges() :
-                worksheet = workbook.worksheets.get(namerange.worksheet.name() );
-                worksheet.cells.remove_duplicates(namerange.first_row, namerange.first_column, namerange.first_row + namerange.row_count - 1, namerange.first_column + namerange.column_count - 1);
             for sheet in workbook.worksheets:
                 if sheet.list_objects.count > 0 :
                     for table in sheet.list_objects:
@@ -44,6 +41,10 @@ class DataProcessing(object):
                                 break
                 else:
                     sheet.cells.remove_duplicates()
+            
+        for namerange in workbook.worksheets.get_named_ranges() :
+            worksheet = workbook.worksheets.get(namerange.worksheet.name() );
+            worksheet.cells.remove_duplicates(namerange.first_row, namerange.first_column, namerange.first_row + namerange.row_count - 1, namerange.first_column + namerange.column_count - 1);
         pass
     
     def data_fill(self , workbook : Workbook, **kwargs):
@@ -51,30 +52,32 @@ class DataProcessing(object):
         if entireSheet :
             for worksheet in workbook.worksheets:
                 for column_index in range ( 0, worksheet.cells.max_data_column):
+                    cell_value_type = self.__get_column_main_data_type(worksheet , column_index)
                     for row_index in range( 0 , worksheet.cells.max_data_row):                    
                         cell = worksheet.cells.get( row_index , column_index )
                         if cell.type == CellValueType.IS_NULL :
-                            cell.put_value(0)                        
+                            self.__put_default_value(cell ,cell_value_type ,kwargs)
         else:
             for worksheet in workbook.worksheets:
                 if worksheet.list_objects.count > 0 :
                     for table in worksheet.list_objects:
                         for column_index in range ( table.start_column , table.end_column ):
+                            cell_value_type = self.__get_column_main_data_type(worksheet , column_index)
                             for row_index in range(table.end_row , table.start_row):
                                 cell = worksheet.cells.get( row_index , column_index )
                                 if cell.type == CellValueType.IsNull :
-                                    cell.put_value(0)    
+                                    self.__put_default_value(cell ,cell_value_type ,kwargs)
                 else:
                     for column_index in range ( 0, worksheet.cells.max_data_column):
+                        cell_value_type = self.__get_column_main_data_type(worksheet , column_index)
                         for row_index in range( 0 , worksheet.cells.max_data_row):                    
                             cell = worksheet.cells.get( row_index , column_index )
                             if cell.type == CellValueType.IS_NULL :
-                                cell.put_value(0)       
+                                self.__put_default_value(cell ,cell_value_type ,kwargs)
         pass
     
-    def get_column_main_data_type(self, worksheet :Worksheet , column_index : int ,**kwargs ):
-        cell_type_set ={}
-        
+    def __get_column_main_data_type(self, worksheet :Worksheet , column_index : int  ):
+        cell_type_set ={}        
         for row_index in range(0, worksheet.cells.max_data_row):
             cell = worksheet.cells.get( row_index , column_index )
             value_type = cell.type 
@@ -94,6 +97,17 @@ class DataProcessing(object):
                 last_cell_value_type = cell_value_type.key
         return last_cell_value_type
         pass 
+    
+    def __put_default_value(self , cell : Cell , cell_value_type : CellValueType , **kwargs ):
+        if cell_value_type == CellValueType.IS_NUMERIC :
+            cell.put_value(0)
+        elif cell_value_type == CellValueType.IS_STRING :
+            cell.put_value("")
+        elif cell_value_type == CellValueType.IS_DATE_TIME :
+            cell.put_value(0)
+        elif cell_value_type == CellValueType.IS_BOOL :
+            cell.put_value(False)    
+        pass
 
 
                 
