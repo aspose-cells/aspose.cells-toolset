@@ -53,27 +53,30 @@ class DataProcessing(object):
             for worksheet in workbook.worksheets:
                 for column_index in range ( 0, worksheet.cells.max_data_column):
                     cell_value_type = self.__get_column_main_data_type(worksheet , column_index)
+                    default_value = self.__get_default_value(column_index , cell_value_type )
                     for row_index in range( 0 , worksheet.cells.max_data_row):                    
                         cell = worksheet.cells.get( row_index , column_index )
                         if cell.type == CellValueType.IS_NULL :
-                            self.__put_default_value(cell ,cell_value_type ,kwargs)
+                            cell.put_value(default_value)
         else:
             for worksheet in workbook.worksheets:
                 if worksheet.list_objects.count > 0 :
                     for table in worksheet.list_objects:
                         for column_index in range ( table.start_column , table.end_column ):
                             cell_value_type = self.__get_column_main_data_type(worksheet , column_index)
+                            default_value = self.__get_default_value(column_index , cell_value_type )
                             for row_index in range(table.end_row , table.start_row):
                                 cell = worksheet.cells.get( row_index , column_index )
                                 if cell.type == CellValueType.IsNull :
-                                    self.__put_default_value(cell ,cell_value_type ,kwargs)
+                                    cell.put_value(default_value)
                 else:
                     for column_index in range ( 0, worksheet.cells.max_data_column):
                         cell_value_type = self.__get_column_main_data_type(worksheet , column_index)
+                        default_value = self.__get_default_value(column_index , cell_value_type )
                         for row_index in range( 0 , worksheet.cells.max_data_row):                    
                             cell = worksheet.cells.get( row_index , column_index )
                             if cell.type == CellValueType.IS_NULL :
-                                self.__put_default_value(cell ,cell_value_type ,kwargs)
+                                cell.put_value(default_value)
         pass
     
     def __get_column_main_data_type(self, worksheet :Worksheet , column_index : int  ):
@@ -98,16 +101,23 @@ class DataProcessing(object):
         return last_cell_value_type
         pass 
     
-    def __put_default_value(self , cell : Cell , cell_value_type : CellValueType , **kwargs ):
+    def __get_default_value(self,  column_index: int , cell_value_type : CellValueType , **kwargs ):
+        if kwargs.get("data_fill_value_dict") is not None:
+            data_fill_value_dict = kwargs.get("data_fill_value_dict")
+            if data_fill_value_dict.get(column_index ) is not None:
+                return data_fill_value_dict[column_index]
+        
         if cell_value_type == CellValueType.IS_NUMERIC :
-            cell.put_value(0)
+            return 0
         elif cell_value_type == CellValueType.IS_STRING :
-            cell.put_value("")
+            return ""
         elif cell_value_type == CellValueType.IS_DATE_TIME :
-            cell.put_value(0)
+            return 0
         elif cell_value_type == CellValueType.IS_BOOL :
-            cell.put_value(False)    
+            return False    
+        
         pass
+    
 
 
                 
