@@ -3,6 +3,7 @@ from aspose.cells import Worksheet
 from aspose.cells import FileFormatType
 from aspose.cells import CellValueType
 from aspose.cells import Cell
+from aspose.cells import ShiftType
 
 class DataProcessing(object):
     
@@ -10,14 +11,14 @@ class DataProcessing(object):
 
         pass
      
-    def data_cleansing(self , workbook : Workbook, need_fill_data : bool , **kwargs):        
+    def data_cleansing(self , workbook : Workbook, need_fill_data : bool , **kwargs):
         self.data_deduplication(workbook ,kwargs)
         if need_fill_data :
             self.data_fill(workbook ,kwargs)
         
         pass
     
-    def data_deduplication(self , workbook : Workbook,**kwargs):        
+    def data_deduplication(self , workbook : Workbook,**kwargs):
         entireSheet = workbook.file_format in [ FileFormatType.CSV , FileFormatType.TSV , FileFormatType.HTML ,FileFormatType.M_HTML ]
         if entireSheet :
             for sheet in workbook.worksheets:
@@ -45,6 +46,35 @@ class DataProcessing(object):
         for namerange in workbook.worksheets.get_named_ranges() :
             worksheet = workbook.worksheets.get(namerange.worksheet.name() );
             worksheet.cells.remove_duplicates(namerange.first_row, namerange.first_column, namerange.first_row + namerange.row_count - 1, namerange.first_column + namerange.column_count - 1);
+        pass
+    
+    def delete_incomplete_rows(self, workbook : Workbook, **kwargs):
+        entireSheet = workbook.file_format in [ FileFormatType.CSV , FileFormatType.TSV , FileFormatType.HTML ,FileFormatType.M_HTML ]
+        if entireSheet :
+            for sheet in workbook.worksheets:
+                for row_index in range( sheet.cells.max_data_row ,0 ):
+                    for column_index in (0, sheet.cells.max_data_column):
+                        if sheet.cells[row_index,column_index].type ==  CellValueType.IsNull :
+                            sheet.cells.delete_row( True )
+
+        else :            
+            for sheet in workbook.worksheets:
+                if sheet.list_objects.count > 0 :
+                    for table in sheet.list_objects:
+                        for row_index in range( table.cells.end_row ,table.cells.start_row ):
+                            for column_index in (table.cells.start_column ,table.cells.end_column ):
+                                if sheet.cells[row_index,column_index].type ==  CellValueType.IsNull :
+                                    sheet.cells.delete_range(column_index, table.cells.start_column,column_index ,table.cells.end_column ,ShiftType.UP )
+                else:
+                    for row_index in range( sheet.cells.max_data_row ,0 ):
+                        for column_index in (0, sheet.cells.max_data_column):
+                            if sheet.cells[row_index,column_index].type ==  CellValueType.IsNull :
+                                sheet.cells.delete_row( True )
+            
+        for namerange in workbook.worksheets.get_named_ranges() :
+            worksheet = workbook.worksheets.get(namerange.worksheet.name() );
+            worksheet.cells.remove_duplicates(namerange.first_row, namerange.first_column, namerange.first_row + namerange.row_count - 1, namerange.first_column + namerange.column_count - 1);
+        
         pass
     
     def data_fill(self , workbook : Workbook, **kwargs):
