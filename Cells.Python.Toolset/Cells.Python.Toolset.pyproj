@@ -26,15 +26,19 @@
     <Compile Include="asposecellstoolset\CellsExportUtility.py" />
     <Compile Include="asposecellstoolset\CellsImportUtility.py" />
     <Compile Include="asposecellstoolset\CellsToolset.py" />
+    <Compile Include="asposecellstoolset\DataConversion.py" />
     <Compile Include="asposecellstoolset\DataProcessing.py" />
     <Compile Include="asposecellstoolset\__init__.py" />
     <Compile Include="test\run_test.py" />
     <Compile Include="test\test_cells.py" />
     <Compile Include="test\test_cells_toolset.py" />
+    <Compile Include="test\test_data_conversion.py" />
+    <Compile Include="test\test_data_processing.py" />
     <Compile Include="test\test_export_data.py" />
     <Compile Include="test\test_import_pandas_data.py" />
     <Compile Include="test\test_import_data.py" />
     <Compile Include="test\test_import_numarray_data.py" />
+    <Compile Include="test\test_poplibs.py" />
     <Compile Include="test\__init__.py" />
   </ItemGroup>
   <ItemGroup>

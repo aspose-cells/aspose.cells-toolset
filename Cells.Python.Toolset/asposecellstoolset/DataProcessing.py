@@ -28,9 +28,9 @@ class DataProcessing(object):
                 if sheet.list_objects.count > 0 :
                     for table in sheet.list_objects:
                         sheet.cells.remove_duplicates(table.start_row, table.start_column, table.end_row, table.end_column)
-                        for row in range(table.end_row , table.start_row):
+                        for row in range(table.end_row , table.start_row - 1):
                             needBreak = False
-                            for column in range(table.start_column , table.end_column):
+                            for column in range(table.start_column , table.end_column + 1):
                                 cell = sheet.cells.get(row , column)
                                 if cell.type == CellValueType.IsNull :
                                     continue
@@ -52,7 +52,7 @@ class DataProcessing(object):
         entireSheet = workbook.file_format in [ FileFormatType.CSV , FileFormatType.TSV , FileFormatType.HTML ,FileFormatType.M_HTML ]
         if entireSheet :
             for sheet in workbook.worksheets:
-                for row_index in range( sheet.cells.max_data_row ,0 ):
+                for row_index in range( sheet.cells.max_data_row , -1 ):
                     for column_index in (0, sheet.cells.max_data_column):
                         if sheet.cells[row_index,column_index].type ==  CellValueType.IsNull :
                             sheet.cells.delete_row( True )
@@ -61,13 +61,13 @@ class DataProcessing(object):
             for sheet in workbook.worksheets:
                 if sheet.list_objects.count > 0 :
                     for table in sheet.list_objects:
-                        for row_index in range( table.cells.end_row ,table.cells.start_row ):
-                            for column_index in (table.cells.start_column ,table.cells.end_column ):
+                        for row_index in range( table.cells.end_row ,table.cells.start_row - 1):
+                            for column_index in (table.cells.start_column ,table.cells.end_column + 1):
                                 if sheet.cells[row_index,column_index].type ==  CellValueType.IsNull :
                                     sheet.cells.delete_range(column_index, table.cells.start_column,column_index ,table.cells.end_column ,ShiftType.UP )
                 else:
-                    for row_index in range( sheet.cells.max_data_row ,0 ):
-                        for column_index in (0, sheet.cells.max_data_column):
+                    for row_index in range( sheet.cells.max_data_row ,-1 ):
+                        for column_index in (0, sheet.cells.max_data_column + 1):
                             if sheet.cells[row_index,column_index].type ==  CellValueType.IsNull :
                                 sheet.cells.delete_row( True )
             
@@ -81,10 +81,10 @@ class DataProcessing(object):
         entireSheet = workbook.file_format in [ FileFormatType.CSV , FileFormatType.TSV , FileFormatType.HTML ,FileFormatType.M_HTML ]
         if entireSheet :
             for worksheet in workbook.worksheets:
-                for column_index in range ( 0, worksheet.cells.max_data_column):
+                for column_index in range ( 0, worksheet.cells.max_data_column + 1):
                     cell_value_type = self.__get_column_main_data_type(worksheet , column_index)
                     default_value = self.__get_default_value(column_index , cell_value_type )
-                    for row_index in range( 0 , worksheet.cells.max_data_row):                    
+                    for row_index in range( 0 , worksheet.cells.max_data_row + 1):                    
                         cell = worksheet.cells.get( row_index , column_index )
                         if cell.type == CellValueType.IS_NULL :
                             cell.put_value(default_value)
@@ -92,18 +92,18 @@ class DataProcessing(object):
             for worksheet in workbook.worksheets:
                 if worksheet.list_objects.count > 0 :
                     for table in worksheet.list_objects:
-                        for column_index in range ( table.start_column , table.end_column ):
+                        for column_index in range ( table.start_column , table.end_column + 1 ):
                             cell_value_type = self.__get_column_main_data_type(worksheet , column_index)
                             default_value = self.__get_default_value(column_index , cell_value_type )
-                            for row_index in range(table.end_row , table.start_row):
+                            for row_index in range(table.end_row , table.start_row - 1 ):
                                 cell = worksheet.cells.get( row_index , column_index )
                                 if cell.type == CellValueType.IsNull :
                                     cell.put_value(default_value)
                 else:
-                    for column_index in range ( 0, worksheet.cells.max_data_column):
+                    for column_index in range ( 0, worksheet.cells.max_data_column + 1 ):
                         cell_value_type = self.__get_column_main_data_type(worksheet , column_index)
                         default_value = self.__get_default_value(column_index , cell_value_type )
-                        for row_index in range( 0 , worksheet.cells.max_data_row):                    
+                        for row_index in range( 0 , worksheet.cells.max_data_row + 1 ):                    
                             cell = worksheet.cells.get( row_index , column_index )
                             if cell.type == CellValueType.IS_NULL :
                                 cell.put_value(default_value)
@@ -147,9 +147,4 @@ class DataProcessing(object):
             return False    
         
         pass
-    
-
-
-                
-
             
