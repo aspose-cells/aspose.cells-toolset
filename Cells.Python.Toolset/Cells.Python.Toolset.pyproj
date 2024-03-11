@@ -38,6 +38,7 @@
     <Compile Include="test\test_import_pandas_data.py" />
     <Compile Include="test\test_import_data.py" />
     <Compile Include="test\test_import_numarray_data.py" />
+    <Compile Include="test\test_poplibs - Copy.py" />
     <Compile Include="test\test_poplibs.py" />
     <Compile Include="test\__init__.py" />
   </ItemGroup>

@@ -19,7 +19,7 @@ class CellsExportUtility(object):
         self.range_name = None
         pass
 
-    def export_data(self, workbook , **kwargs):
+    def export_data(self, workbook : Workbook, **kwargs)-> list:
         """
         Export worksheet data from a workbook.
         :param Workbook workbook: (required)
