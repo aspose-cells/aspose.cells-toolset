@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from pathlib import Path
 import pandas as pd
 import re
 import io
@@ -90,7 +91,7 @@ class ExcelPandas(object):
     
 
         """
-        read data form spreadsheet which is include of Excel, cvs, txt, ods, iCalc and so on.
+        write data form spreadsheet which is include of Excel, cvs, txt, ods, iCalc and so on.
         :param str path: If the file exists, it will be appended to the file. If the file does not exist, a new file is created and written.  (required)
         :param int sheet_index: The worksheet index indicates the position in the spreadsheet. (optional)
         :param int list_object_index: The list object index indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
@@ -100,8 +101,13 @@ class ExcelPandas(object):
         :param int name_text: The workbook name indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
         :return  
         """  
-        def write_spreadsheet( self , path: str,  **kwargs ) :
-        
+        def write_spreadsheet( self , path: str, data : pd.DataFrame , **kwargs ) :
+            if Path.exists(path) :
+                workbook = Workbook(path)
+            else :
+                workbook = Workbook()
+            
+
             pass
     
     def __get_data_to_dataframe( self , cells : Cells , begin_row_index : int , begin_column_index : int , end_row_index : int , end_column_index : int , has_header: bool, has_total : bool)->pd.DataFrame:        
