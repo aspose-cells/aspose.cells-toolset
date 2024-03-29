@@ -22,9 +22,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="src\ExcelPandas.py" />
+    <Compile Include="src\SpreadsheetPandas.py" />
     <Compile Include="test\run_test.py" />
-    <Compile Include="test\test_excel_pandas.py" />
+    <Compile Include="test\test_spreadsheet_pandas.py" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />

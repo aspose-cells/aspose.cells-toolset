@@ -11,7 +11,7 @@ from aspose.cells import CellsHelper
 from aspose.cells import CellValueType
 
 
-class ExcelPandas(object):
+class SpreadsheetPandas(object):
     
     def __init__(self):
         
