@@ -5,7 +5,7 @@ import sys
 import unittest
 import warnings
 import re
-
+import pandas as pd
 
 
 ABSPATH = os.path.abspath(os.path.realpath(os.path.dirname(__file__)) + "/..")
@@ -22,7 +22,12 @@ class TestSpreadsheetPandas( unittest.TestCase):
     
     def tearDown(self):
         pass
-    
+    def test_write_spreadsheet_df(self):
+        excelPandas = SpreadsheetPandas()
+        data = pd.DataFrame( [['Google', 10], ['Runoob', 12], ['Wiki', 13]], columns=['Site', 'Age'])
+        excelPandas.write_spreadsheet("D:\cells-toolset\TestData\Output\BookWriteTable.xlsx",data)    
+        # print(df)
+        pass
     def test_read_spreadsheet_csv(self):
         excelPandas = SpreadsheetPandas()
         df = excelPandas.read_spreadsheet("D:\cells-toolset\TestData\Input\BookTableData.csv")    

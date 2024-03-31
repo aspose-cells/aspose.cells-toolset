@@ -1,15 +1,15 @@
 from __future__ import absolute_import
 from pathlib import Path
-import pandas as pd
-import re
-import io
 from aspose.cells import Workbook
 from aspose.cells import Worksheet
 from aspose.cells import Cells
 from aspose.cells.tables import ListObject
 from aspose.cells import CellsHelper
 from aspose.cells import CellValueType
-
+import pandas as pd
+import re
+import io
+import os
 
 class SpreadsheetPandas(object):
     
@@ -17,17 +17,17 @@ class SpreadsheetPandas(object):
         
         pass
     
-        """
-        read data form spreadsheet which is include of Excel, cvs, txt, ods, iCalc and so on.
-        :param str path:  (required)
-        :param int sheet_index: The worksheet index indicates the position in the spreadsheet. (optional)
-        :param int list_object_index: The list object index indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
-        :param int pivot_table_index: The worksheet index indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
-        :param int chart_index: The worksheet index indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
-        :param int cell_area: The worksheet cell_area indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
-        :param int name_text: The workbook name indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
-        :return DataFrame: 
-        """                
+    """
+    read data form spreadsheet which is include of Excel, cvs, txt, ods, iCalc and so on.
+    :param str path:  (required)
+    :param int sheet_index: The worksheet index indicates the position in the spreadsheet. (optional)
+    :param int list_object_index: The list object index indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
+    :param int pivot_table_index: The worksheet index indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
+    :param int chart_index: The worksheet index indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
+    :param int cell_area: The worksheet cell_area indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
+    :param int name_text: The workbook name indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
+    :return DataFrame: 
+    """                
     def read_spreadsheet( self , path: str , **kwargs )-> pd.DataFrame:
         workbook = Workbook(path)
         sheet_index = None
@@ -87,29 +87,80 @@ class SpreadsheetPandas(object):
         has_table_header = self.__has_table_header(cells,cells.min_data_row,cells.min_data_column,cells.max_data_row,cells.max_data_column)
         return self.__get_data_to_dataframe(cells,cells.min_data_row,cells.min_data_column,cells.max_data_row,cells.max_data_column,has_table_header,False )
 
+        pass    
+
+    """
+    write data form spreadsheet which is include of Excel, cvs, txt, ods, iCalc and so on.
+    :param str path: If the file exists, it will be appended to the file. If the file does not exist, a new file is created and written.  (required)
+    :param int sheet_index: The worksheet index indicates the position in the spreadsheet. (optional)
+    :param int list_object_index: The list object index indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
+    :param int pivot_table_index: The worksheet index indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
+    :param int chart_index: The worksheet index indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
+    :param int cell_area: The worksheet cell_area indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
+    :param int name_text: The workbook name indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
+    :return  
+    """  
+    def write_spreadsheet( self , path: str, data : pd.DataFrame , **kwargs ) :
+        if os.path.exists(path) :
+            workbook = Workbook(path)
+        else :
+            workbook = Workbook()
+        sheet_index = None
+        if kwargs.get("sheet_index") is not None:
+            sheet_index = kwargs.get("sheet_index")
+        else:
+            sheet_index =  workbook.worksheets.active_sheet_index         
+        
+        row_index = 0
+        column_index = 0
+        if kwargs.get("row_index") is not None:
+            row_index = kwargs.get("row_index")
+        if kwargs.get("column_index") is not None:
+            column_index = kwargs.get("column_index")    
+        
+        cells = workbook.worksheets[sheet_index].cells   
+        
+        self.__put_dataframe_into_workbook (cells , data ,row_index ,column_index)
+        workbook.save(path)
+        pass
+       
+    def __put_dataframe_into_workbook(self, cells,  data : pd.DataFrame, row_index, column_index):
+        
+        df_column_index = column_index
+        for column_name in data.columns:
+           df_row_index = row_index
+           cell = cells.get(df_row_index , df_column_index)
+           cell.put_value(column_name)
+           df_row_index = df_row_index + 1
+           
+           for df_value in data[column_name]:
+               cell =  cells.get(df_row_index , df_column_index)
+               # cell.put_value(df_value)
+               self.__cell_put_value(cell ,df_value ,data[column_name].dtype )
+               df_row_index = df_row_index + 1
+           df_column_index = df_column_index + 1
+
         pass
     
-
-        """
-        write data form spreadsheet which is include of Excel, cvs, txt, ods, iCalc and so on.
-        :param str path: If the file exists, it will be appended to the file. If the file does not exist, a new file is created and written.  (required)
-        :param int sheet_index: The worksheet index indicates the position in the spreadsheet. (optional)
-        :param int list_object_index: The list object index indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
-        :param int pivot_table_index: The worksheet index indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
-        :param int chart_index: The worksheet index indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
-        :param int cell_area: The worksheet cell_area indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
-        :param int name_text: The workbook name indicates the position in the spreadsheet. If the worksheet index is None, the default worksheet index is the active worksheet index. (optional)
-        :return  
-        """  
-        def write_spreadsheet( self , path: str, data : pd.DataFrame , **kwargs ) :
-            if Path.exists(path) :
-                workbook = Workbook(path)
-            else :
-                workbook = Workbook()
-            
-
-            pass
-    
+    def __cell_put_value(self ,cell , raw_value, datatype):
+        dtype = type(raw_value)
+        match datatype:
+            case "int64" :
+                print(raw_value.dtype)
+                value = int(raw_value)
+            case "float64" :
+                value = float(raw_value)                
+            case "bool" :
+                value = bool(raw_value)
+            case "object" :
+                value = str(raw_value)
+            case "datetime64" :
+                ts = pd.to_datetime(str(raw_value))
+                value = ts.strftime('%Y.%m.%d')     
+            case _:
+                 value = raw_value
+        cell.put_value(value)
+        pass     
     def __get_data_to_dataframe( self , cells : Cells , begin_row_index : int , begin_column_index : int , end_row_index : int , end_column_index : int , has_header: bool, has_total : bool)->pd.DataFrame:        
         column_title_list =[]
         row_index = 0
@@ -182,15 +233,13 @@ class SpreadsheetPandas(object):
                 values_data.append(cells.get(row_index , column_index + index + 1).value)
             data[chart.n_series[index].display_name] = values_data
             yNames.append(chart.n_series[index].display_name)
-        return pd.DataFrame(data)
-            
+        return pd.DataFrame(data)            
     def __parse_data_source( self , value : str):        
         matchObj = re.match( r'^=(.*)!\$(.*)\$(\d+):\$(.*)\$(\d+)', value, re.M|re.I)
         if matchObj == None :
             return None
         
-        return (matchObj.group(1) ,int( matchObj.group(3)) - 1 ,int( CellsHelper.column_name_to_index (matchObj.group(2))), int( matchObj.group(5)) -1 , int(  CellsHelper.column_name_to_index (matchObj.group(4))) )
-            
+        return (matchObj.group(1) ,int( matchObj.group(3)) - 1 ,int( CellsHelper.column_name_to_index (matchObj.group(2))), int( matchObj.group(5)) -1 , int(  CellsHelper.column_name_to_index (matchObj.group(4))) )            
     def __parse_cell_area( self , value : str):        
         matchObj = re.match( r'^([a-zA-Z]*)(\d+):([a-zA-Z]*)(\d+)', value, re.M|re.I)
         if matchObj == None :

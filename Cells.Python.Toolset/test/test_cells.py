@@ -5,6 +5,8 @@ import sys
 import unittest
 import warnings
 import re
+import numpy as np
+import pandas as pd
 
 ABSPATH = os.path.abspath(os.path.realpath(os.path.dirname(__file__)) + "/..")
 sys.path.append(ABSPATH)
@@ -21,6 +23,19 @@ class TestCells( unittest.TestCase):
     def tearDown(self):
         pass
     
+    def test_print_datafre(self):
+        data = [['Google', 10], ['Runoob', 12], ['Wiki', 13]]
+        print(data)
+        data_frame = pd.DataFrame(data, columns=['Site', 'Age'])
+        print(data_frame["Site"].dtype )
+        print(data_frame["Age"].dtype )
+        print(data_frame)
+        for column_name in data_frame.columns:
+           print (column_name)
+           for df_value in data_frame[column_name]:
+               print(df_value)
+
+        pass
     # def test_cells_helper(self):       
     #     row_index = []
     #     column_index = []
