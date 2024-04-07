@@ -7,6 +7,8 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Cells.Python.Toolset", "Cel
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "SpreadsheetPandas", "SpreadsheetPandas\SpreadsheetPandas.pyproj", "{E15DDFA7-8034-41B4-BF5D-7BC408EA4524}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dataAnalysisDemo", "dataAnalysisDemo\dataAnalysisDemo.csproj", "{FB8AD6C6-5FD6-4DB2-8668-2EC3770C8AEC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,10 @@ Global
 		{E1E52B17-069E-4CBB-BD98-E551C705FD82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E15DDFA7-8034-41B4-BF5D-7BC408EA4524}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E15DDFA7-8034-41B4-BF5D-7BC408EA4524}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB8AD6C6-5FD6-4DB2-8668-2EC3770C8AEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB8AD6C6-5FD6-4DB2-8668-2EC3770C8AEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB8AD6C6-5FD6-4DB2-8668-2EC3770C8AEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB8AD6C6-5FD6-4DB2-8668-2EC3770C8AEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
