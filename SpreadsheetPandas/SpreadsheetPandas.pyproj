@@ -22,18 +22,23 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src\data_conversion.py" />
     <Compile Include="src\SpreadsheetPandas.py" />
     <Compile Include="test\run_test.py" />
     <Compile Include="test\test_spreadsheet_pandas.py" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
+    <Content Include="docs\data_access.md" />
+    <Content Include="docs\data_conversion.md" />
+    <Content Include="docs\data_manipulation.md" />
     <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="examples\" />
     <Folder Include="docs\" />
     <Folder Include="src\" />
+    <Folder Include="src\interal\" />
     <Folder Include="test\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
