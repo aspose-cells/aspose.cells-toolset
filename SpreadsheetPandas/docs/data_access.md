@@ -4,7 +4,7 @@
 
 ## Work with Excel files
 
-### **Get data from Excel file or other format files.**
+### **Get data from Excel file or other format spreadsheet files.**
 
 Read a csv file is simple:
 
@@ -78,10 +78,24 @@ write_spreadsheet("example.xlsx"，pd.DataFrame(array) , begin_row_index=>3, beg
 
 ## Work with Html files
 
+### **Get data from Html file or Uri.**
+
+Read a Html file is simple:
+
+``` Python
+import spreadsheetpandas
+data_frame = read_spreadsheet("example.html")
+
+```
+Read a Html content form uri is simple: 
+``` Python
+import spreadsheetpandas
+data_frame = read_spreadsheet("https://docs.aspose.cloud/cells/supported-file-formats/")
+
+```
 
 
-
-
+## **Only get table data from Html files or uri?**
 
 # Support Data File Format
 
