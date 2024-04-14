@@ -75,7 +75,6 @@ write_spreadsheet("example.xlsx"，pd.DataFrame(array) , begin_row_index=>3, beg
 ```
 
 
-
 ## Work with Html files
 
 ### **Get data from Html file or Uri.**

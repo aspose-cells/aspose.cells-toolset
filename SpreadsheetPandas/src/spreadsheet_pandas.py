@@ -28,6 +28,7 @@ def read_spreadsheet( path: str , **kwargs )-> pd.DataFrame:
                 print(response.content)
                 return pd.DataFrame()
         else :
+            print( path + " no exists." )
             return pd.DataFrame()
 
     sheet_index = None
