@@ -183,7 +183,14 @@ class TestDataConversion( unittest.TestCase):
         data =  worksheet_to_ndarray (worksheet)
         assert data.shape == (25,6)
         pass    
-
+    
+    def test_worksheet_to_dataframe(self ):
+        workbook = Workbook("../TestData/Input/BookTableData.xlsx")
+        worksheet = workbook.worksheets.get("SaleSheet")
+        data =  worksheet_to_dataframe (worksheet)        
+        assert data.shape == (26,7)
+        pass    
+    
     def test_list_object_to_list(self ):
         workbook = Workbook("../TestData/Input/BookTableData.xlsx")
         worksheet = workbook.worksheets.get("SaleTable")
@@ -197,19 +204,70 @@ class TestDataConversion( unittest.TestCase):
         data =  list_object_to_tuple (worksheet.list_objects[0])
         assert len(data) ==21
         pass    
-    def test_worksheet_to_ndarry(self ):
+    def test_list_object_to_ndarry(self ):
         workbook = Workbook("../TestData/Input/BookTableData.xlsx")
         worksheet = workbook.worksheets.get("SaleTable")
         data =  list_object_to_ndarray (worksheet.list_objects[0])
         assert data.shape == (20,5)
         pass    
-    def test_worksheet_to_dataframe(self ):
+    def test_list_object_to_dataframe(self ):
         workbook = Workbook("../TestData/Input/BookTableData.xlsx")
         worksheet = workbook.worksheets.get("SaleTable")
         data =  list_object_to_dataframe (worksheet.list_objects[0])
-        print(data)
         assert data.shape == (20,5)
         pass    
+    
+    def test_range_to_list(self ):
+        workbook = Workbook("../TestData/Input/BookTableData.xlsx")
+        range_name = workbook.worksheets[2].cells.create_range("D15", "H35");
+        data =  range_to_list( range_name )
+        assert len(data) == 21
+        pass    
+
+    def test_range_to_tuple(self ):
+        workbook = Workbook("../TestData/Input/BookTableData.xlsx")
+        range_name = workbook.worksheets.get("SaleRange").cells.create_range("D15", "H35");
+        data =  range_to_tuple (range_name)
+        assert len(data) ==21
+        pass    
+    def test_range_to_ndarry(self ):
+        workbook = Workbook("../TestData/Input/BookTableData.xlsx")
+        range_name = workbook.worksheets.get("SaleRange").cells.create_range("D16", "H35");
+        data =  range_to_ndarray (range_name)
+        assert data.shape == (20,5)
+        pass    
+    def test_range_to_dataframe(self ):
+        workbook = Workbook("../TestData/Input/BookTableData.xlsx")
+        range_name = workbook.worksheets.get("SaleRange").cells.create_range("D15", "H35");
+        data =  range_to_dataframe (range_name)
+        assert data.shape == (20,5)
+        pass    
+
+    def test_name_to_list(self ):
+        workbook = Workbook("../TestData/Input/BookTableData.xlsx")
+        name = workbook.worksheets.names.get("RangeData");
+        data =  name_to_list( name )
+        assert len(data) == 21
+        pass    
+
+    def test_name_to_tuple(self ):
+        workbook = Workbook("../TestData/Input/BookTableData.xlsx")
+        name = workbook.worksheets.names.get("RangeData");
+        data =  name_to_tuple (name)
+        assert len(data) ==21
+        pass    
+    def test_name_to_ndarry(self ):
+        workbook = Workbook("../TestData/Input/BookTableData.xlsx")
+        name = workbook.worksheets.names.get("RangeData");
+        data =  name_to_ndarray (name)
+        assert data.shape == (21,5)
+        pass    
+    def test_name_to_dataframe(self ):
+        workbook = Workbook("../TestData/Input/BookTableData.xlsx")
+        name = workbook.worksheets.names.get("RangeData");
+        data =  name_to_dataframe (name)
+        assert data.shape == (20,5)
+        pass  
 
 if __name__ == '__main__':
     unittest.main()

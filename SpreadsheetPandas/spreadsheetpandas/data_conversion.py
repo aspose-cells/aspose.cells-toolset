@@ -2,6 +2,7 @@
     Data Conversion
 """
 
+from _pytest.junitxml import Tuple
 from aspose.cells import Workbook
 from aspose.cells import Worksheet
 from aspose.cells import Cells
@@ -139,60 +140,125 @@ def list_object_to_dataframe(list_object : ListObject ) -> pd.DataFrame:
     show_table_header = __has_table_header(cells,list_object.start_row,list_object.start_column,list_object.end_row,list_object.end_column)
     return __get_dataframe(cells,list_object.start_row,list_object.start_column,list_object.end_row,list_object.end_column,show_table_header,False)
 
-def range_to_list( range : Range ) ->list:
+def range_to_list( range_name : Range ) ->list:
     """
     Convert Range to list.
-    :param Range range:  (required)
+    :param Range range_name:  (required)
     :return list: 
     """   
-    cells = range.worksheet.cells
+    cells = range_name.worksheet.cells
     table =[]
-    for row_index in range(range.first_row , range.first_row + range.row_count -1):
+    for row_index in range(range_name.first_row , range_name.first_row + range_name.row_count ):
         row  =[]            
-        for column_index in range(range.first_column, range.first_column + range.column_count -1):
+        for column_index in range(range_name.first_column, range_name.first_column + range_name.column_count):
             row.append(  cells.get(row_index,column_index).value)
         table.append(row)
     return table   
 
-def range_to_tuple(  range : Range  ) -> tuple:
+def range_to_tuple(  range_name : Range  ) -> tuple:
     """
     Convert Range to tuple.
     :param Range range:  (required)
     :return tuple: 
     """   
-    cells = range.worksheet.cells
-    table = ()
-    for row_index in range(range.first_row , range.first_row + range.row_count -1):
-        row  = ()        
-        for column_index in range(range.first_column, range.first_column + range.column_count -1):
+    cells = range_name.worksheet.cells
+    table = []
+    for row_index in range(range_name.first_row , range_name.first_row + range_name.row_count ):
+        row  =[]      
+        for column_index in range(range_name.first_column, range_name.first_column + range_name.column_count ):
             row.append(  cells.get(row_index,column_index).value)
         table.append(row)
-    return table    
+    return  tuple (table)
 
-def range_to_ndarray( range : Range  ) -> np.ndarray:
+def range_to_ndarray( range_name : Range  ) -> np.ndarray:
     """
     Convert Range to ndarray.
     :param Range range:  (required)
     :return ndarray: 
     """   
-    cells = range.worksheet.cells
-    table = ()
-    for row_index in range(range.first_row , range.first_row + range.row_count -1):
-        row  = ()        
-        for column_index in range(range.first_column, range.first_column + range.column_count -1):
-            row.append(  cells.get(row_index,column_index).value)
+    cells = range_name.worksheet.cells
+    table = []
+    for row_index in range(range_name.first_row , range_name.first_row + range_name.row_count ):
+        row  = []       
+        for column_index in range(range_name.first_column, range_name.first_column + range_name.column_count ):
+            if cells.get(row_index,column_index).type == CellValueType.IS_NUMERIC :
+                row.append(  cells.get(row_index,column_index).value)
+            else:
+                row.append(0)
         table.append(row)
-    return np.ndarray( table)
+    return np.asarray( table)
 
-def range_to_dataframe( range : Range  ) -> pd.DataFrame:
+def range_to_dataframe( range_name : Range  ) -> pd.DataFrame:
     """
     Convert Range to DataFrame.
     :param Range range:  (required)
     :return DataFrame: 
     """   
-    cells = range.worksheet.cells    
-    show_table_header = __has_table_header(cells,range.first_row,range.first_column,range.first_row + range.row_count -1,range.first_column + range.column_count -1)
-    return __get_dataframe(cells,range.first_row,range.first_column,range.first_row + range.row_count -1,range.first_column + range.column_count -1,show_table_header,False)
+    cells = range_name.worksheet.cells    
+    show_table_header = __has_table_header(cells,range_name.first_row,range_name.first_column,range_name.first_row + range_name.row_count -1,range_name.first_column + range_name.column_count -1)
+    return __get_dataframe(cells,range_name.first_row,range_name.first_column,range_name.first_row + range_name.row_count -1,range_name.first_column + range_name.column_count -1,show_table_header,False)
+
+def name_to_list( name : Name ) ->list:
+    """
+    Convert Range to list.
+    :param Range range_name:  (required)
+    :return list: 
+    """   
+    range_name = name.get_range()
+    cells = range_name.worksheet.cells
+    table =[]
+    for row_index in range(range_name.first_row , range_name.first_row + range_name.row_count ):
+        row  =[]            
+        for column_index in range(range_name.first_column, range_name.first_column + range_name.column_count):
+            row.append(  cells.get(row_index,column_index).value)
+        table.append(row)
+    return table   
+
+def name_to_tuple( name : Name  ) -> tuple:
+    """
+    Convert Range to tuple.
+    :param Range range:  (required)
+    :return tuple: 
+    """   
+    range_name = name.get_range()
+    cells = range_name.worksheet.cells
+    table = []
+    for row_index in range(range_name.first_row , range_name.first_row + range_name.row_count ):
+        row  =[]      
+        for column_index in range(range_name.first_column, range_name.first_column + range_name.column_count ):
+            row.append(  cells.get(row_index,column_index).value)
+        table.append(row)
+    return  tuple (table)
+
+def name_to_ndarray( name : Name ) -> np.ndarray:
+    """
+    Convert Range to ndarray.
+    :param Range range:  (required)
+    :return ndarray: 
+    """   
+    range_name = name.get_range()
+    cells = range_name.worksheet.cells
+    table = []
+    for row_index in range(range_name.first_row , range_name.first_row + range_name.row_count ):
+        row  = []       
+        for column_index in range(range_name.first_column, range_name.first_column + range_name.column_count ):
+            if cells.get(row_index,column_index).type == CellValueType.IS_NUMERIC :
+                row.append(  cells.get(row_index,column_index).value)
+            else:
+                row.append(0)
+        table.append(row)
+    return np.asarray( table)
+
+def name_to_dataframe(  name : Name   ) -> pd.DataFrame:
+    """
+    Convert Range to DataFrame.
+    :param Range range:  (required)
+    :return DataFrame: 
+    """   
+    range_name = name.get_range()
+    cells = range_name.worksheet.cells    
+    show_table_header = __has_table_header(cells,range_name.first_row,range_name.first_column,range_name.first_row + range_name.row_count -1,range_name.first_column + range_name.column_count -1)
+    return __get_dataframe(cells,range_name.first_row,range_name.first_column,range_name.first_row + range_name.row_count -1,range_name.first_column + range_name.column_count -1,show_table_header,False)
 ##  python object to cells object
 def list_to_worksheet(data : list , worksheet : Worksheet , **kwargs) -> Worksheet :
     """
