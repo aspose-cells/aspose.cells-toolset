@@ -8,7 +8,6 @@ from aspose.cells import Cells
 from aspose.cells import LoadOptions
 from aspose.cells import CellsHelper
 from aspose.cells import CellValueType
-from aspose.pyio  import BufferStream
 from aspose.cells.tables import ListObject
 import numpy as np
 import pandas as pd
@@ -23,7 +22,8 @@ def read_spreadsheet( path: str , **kwargs )-> pd.DataFrame:
         if str.startswith("https://") or  str.startswith("http://") :
             response = requests.get('https://docs.aspose.cloud/cells/supported-file-formats/')
             if response.status_code =="200" :
-                workbook = Workbook(BufferStream(response.content),LoadOptions(LoadFormat.HTML))
+                # workbook = Workbook(BufferStream(response.content),LoadOptions(LoadFormat.HTML))
+                pass
             else:
                 print(response.content)
                 return pd.DataFrame()
@@ -131,11 +131,10 @@ def __put_dataframe_into_workbook( cells,  data : pd.DataFrame, row_index, colum
 
     pass
 
-def __cell_put_value(self ,cell , raw_value, datatype):
+def __cell_put_value(cell , raw_value, datatype):
     dtype = type(raw_value)
     match datatype:
         case "int64" :
-            print(raw_value.dtype)
             value = int(raw_value)
         case "float64" :
             value = float(raw_value)                
@@ -150,7 +149,7 @@ def __cell_put_value(self ,cell , raw_value, datatype):
                 value = raw_value
     cell.put_value(value)
     pass     
-def __get_data_to_dataframe( self , cells : Cells , begin_row_index : int , begin_column_index : int , end_row_index : int , end_column_index : int , has_header: bool, has_total : bool)->pd.DataFrame:        
+def __get_data_to_dataframe( cells : Cells , begin_row_index : int , begin_column_index : int , end_row_index : int , end_column_index : int , has_header: bool, has_total : bool)->pd.DataFrame:        
     column_title_list =[]
     row_index = 0
     cells_helper = CellsHelper
@@ -196,10 +195,10 @@ def __has_table_header( cells: Cells, begin_row_index :int, begin_column_index:i
             break
     return has_header
     pass        
-def __get_chart_data_to_dataframe( self , workbook : Workbook, sheet_index : int , chart_index : int )->pd.DataFrame:
+def __get_chart_data_to_dataframe( workbook : Workbook, sheet_index : int , chart_index : int )->pd.DataFrame:
     chart = workbook.worksheets[sheet_index].charts[chart_index]
     data = {}
-    series = self.__parse_data_source( chart.n_series.category_data )
+    series = __parse_data_source( chart.n_series.category_data )
     cells = workbook.worksheets.get(series[0]).cells
     column_index  = series[2]
     column_data = []
@@ -216,20 +215,20 @@ def __get_chart_data_to_dataframe( self , workbook : Workbook, sheet_index : int
     data[xName] = column_data
     yNames = []
     for index in range( 0,len (chart.n_series)):
-        values = self.__parse_data_source( chart.n_series[index].values)
+        values = __parse_data_source( chart.n_series[index].values)
         values_data = []
         for row_index in range (values[1],values[3] +1):
             values_data.append(cells.get(row_index , column_index + index + 1).value)
         data[chart.n_series[index].display_name] = values_data
         yNames.append(chart.n_series[index].display_name)
     return pd.DataFrame(data)            
-def __parse_data_source( self , value : str):        
+def __parse_data_source(  value : str):        
     matchObj = re.match( r'^=(.*)!\$(.*)\$(\d+):\$(.*)\$(\d+)', value, re.M|re.I)
     if matchObj == None :
         return None
     
     return (matchObj.group(1) ,int( matchObj.group(3)) - 1 ,int( CellsHelper.column_name_to_index (matchObj.group(2))), int( matchObj.group(5)) -1 , int(  CellsHelper.column_name_to_index (matchObj.group(4))) )            
-def __parse_cell_area( self , value : str):        
+def __parse_cell_area(  value : str):        
     matchObj = re.match( r'^([a-zA-Z]*)(\d+):([a-zA-Z]*)(\d+)', value, re.M|re.I)
     if matchObj == None :
         return None

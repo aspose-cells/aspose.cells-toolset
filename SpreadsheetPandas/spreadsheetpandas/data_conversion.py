@@ -1,11 +1,12 @@
 """
     Data Conversion
 """
-from __future__ import absolute_import
+
 from aspose.cells import Workbook
 from aspose.cells import Worksheet
 from aspose.cells import Cells
 from aspose.cells import Range
+from aspose.cells import Name
 from aspose.cells import CellsHelper
 from aspose.cells import CellValueType
 from aspose.cells import ProtectionType
@@ -13,7 +14,7 @@ from aspose.cells.tables import ListObject
 import numpy as np
 import pandas as pd
 
-
+## cells object to python object
 def worksheet_to_list( worksheet : Worksheet ) ->list:
     """
     Convert Worksheet to list.
@@ -29,7 +30,6 @@ def worksheet_to_list( worksheet : Worksheet ) ->list:
             row.append(  worksheet.cells.get(row_index,column_index).value)
         table.append(row)
     return table    
-
 
 def worksheet_to_tuple( worksheet : Worksheet ) -> tuple:
     """
@@ -66,7 +66,6 @@ def worksheet_to_ndarray( worksheet : Worksheet ) -> np.ndarray:
         table.append(row)
     return np.ndarray(table)
 
-
 def worksheet_to_dataframe( worksheet : Worksheet ) -> pd.DataFrame:
     """
     Convert Worksheet to DataFrame.
@@ -77,7 +76,6 @@ def worksheet_to_dataframe( worksheet : Worksheet ) -> pd.DataFrame:
     max_column_index  = worksheet.cells.max_column
     show_table_header = __has_table_header(worksheet.cells,0,0,max_row_index,max_column_index)
     return __get_dataframe(worksheet.cells,0,0,max_row_index,max_column_index,show_table_header,False)
-
 
 def list_object_to_list( list_object : ListObject ) ->list:
     """
@@ -93,7 +91,6 @@ def list_object_to_list( list_object : ListObject ) ->list:
             row.append(  cells.get(row_index,column_index).value)
         table.append(row)
     return table   
-
 
 def list_object_to_tuple( list_object : ListObject ) -> tuple:
     """
@@ -125,7 +122,6 @@ def list_object_to_ndarray(list_object : ListObject ) -> np.ndarray:
         table.append(row)
     return np.ndarray( table )
 
-
 def list_object_to_dataframe(list_object : ListObject ) -> pd.DataFrame:
     """
     Convert ListObject to DataFrame.
@@ -135,7 +131,6 @@ def list_object_to_dataframe(list_object : ListObject ) -> pd.DataFrame:
     cells = list_object.data_range.worksheet.cells    
     show_table_header = __has_table_header(cells,list_object.start_row,list_object.start_column,list_object.end_row,list_object.end_column)
     return __get_dataframe(cells,list_object.start_row,list_object.start_column,list_object.end_row,list_object.end_column,show_table_header,False)
-
 
 def range_to_list( range : Range ) ->list:
     """
@@ -151,7 +146,6 @@ def range_to_list( range : Range ) ->list:
             row.append(  cells.get(row_index,column_index).value)
         table.append(row)
     return table   
-
 
 def range_to_tuple(  range : Range  ) -> tuple:
     """
@@ -183,7 +177,6 @@ def range_to_ndarray( range : Range  ) -> np.ndarray:
         table.append(row)
     return np.ndarray( table)
 
-
 def range_to_dataframe( range : Range  ) -> pd.DataFrame:
     """
     Convert Range to DataFrame.
@@ -193,8 +186,7 @@ def range_to_dataframe( range : Range  ) -> pd.DataFrame:
     cells = range.worksheet.cells    
     show_table_header = __has_table_header(cells,range.first_row,range.first_column,range.first_row + range.row_count -1,range.first_column + range.column_count -1)
     return __get_dataframe(cells,range.first_row,range.first_column,range.first_row + range.row_count -1,range.first_column + range.column_count -1,show_table_header,False)
-
-
+##  python object to cells object
 def list_to_worksheet(data : list , worksheet : Worksheet , **kwargs) -> Worksheet :
     """
     import list data into worksheet.
@@ -210,7 +202,7 @@ def list_to_worksheet(data : list , worksheet : Worksheet , **kwargs) -> Workshe
         is_vertical = kwargs.get("is_vertical")
     begin_row_index = 0
     if kwargs.get("begin_row_index") is not None:
-        begin_row_index = kwargs.get("row_index")
+        begin_row_index = kwargs.get("begin_row_index")
     begin_column_index = 0
     if kwargs.get("begin_column_index") is not None:
         begin_column_index = kwargs.get("begin_column_index")
@@ -237,14 +229,14 @@ def tuple_to_worksheet(data : tuple , worksheet : Worksheet , **kwargs) -> Works
         only_ready = kwargs.get("only_ready")        
     begin_row_index = 0
     if kwargs.get("begin_row_index") is not None:
-        begin_row_index = kwargs.get("row_index")
+        begin_row_index = kwargs.get("begin_row_index")
     begin_column_index = 0
     if kwargs.get("begin_column_index") is not None:
         begin_column_index = kwargs.get("begin_column_index")
     __import_table_data_into_workbook(worksheet.cells , data , begin_row_index,begin_column_index,is_vertical) 
     
     if only_ready :
-        worksheet.protect(ProtectionType.Contents);
+        worksheet.protect(ProtectionType.CONTENTS);
         worksheet.protection.password = "";            
         
     return  worksheet
@@ -268,14 +260,14 @@ def ndarray_to_worksheet(data :  np.ndarray , worksheet : Worksheet , **kwargs) 
         only_ready = kwargs.get("only_ready")        
     begin_row_index = 0
     if kwargs.get("begin_row_index") is not None:
-        begin_row_index = kwargs.get("row_index")
+        begin_row_index = kwargs.get("begin_row_index")
     begin_column_index = 0
     if kwargs.get("begin_column_index") is not None:
         begin_column_index = kwargs.get("begin_column_index")
     __import_table_data_into_workbook(worksheet.cells , data , begin_row_index,begin_column_index,is_vertical) 
     
     if only_ready :
-        worksheet.protect(ProtectionType.Contents);
+        worksheet.protect(ProtectionType.CONTENTS);
         worksheet.protection.password = "";            
         
     return  worksheet
@@ -296,7 +288,7 @@ def dataframe_to_worksheet(data :  pd.DataFrame , worksheet : Worksheet , **kwar
         is_vertical = kwargs.get("is_vertical")
     begin_row_index = 0
     if kwargs.get("begin_row_index") is not None:
-        begin_row_index = kwargs.get("row_index")
+        begin_row_index = kwargs.get("begin_row_index")
     begin_column_index = 0
     if kwargs.get("begin_column_index") is not None:
         begin_column_index = kwargs.get("begin_column_index")
@@ -318,6 +310,250 @@ def dataframe_to_worksheet(data :  pd.DataFrame , worksheet : Worksheet , **kwar
         
     return  worksheet
 
+def list_to_range(data : list , worksheet : Worksheet , **kwargs) -> Range :
+    """
+    import list data into worksheet.
+    :param list data:  (required)
+    :param Worksheet worksheet: . (required)
+    :param int begin_row_index: The row index of worksheet indicating the position in the imported data workbook. If the index is None, the default index is 0. (optional)
+    :param int begin_column_index: The column index of worksheet indicating the position in the imported data workbook. If the index is None, the default index is 0. (optional)
+    :param bool is_vertical: Indicate whether the data is inserted vertically. The default value is False. (optional)
+    :return Worksheet: 
+    """      
+    is_vertical = False
+    if kwargs.get("is_vertical") is not None:
+        is_vertical = kwargs.get("is_vertical")
+    begin_row_index = 0
+    if kwargs.get("begin_row_index") is not None:
+        begin_row_index = kwargs.get("begin_row_index")
+    begin_column_index = 0
+    if kwargs.get("begin_column_index") is not None:
+        begin_column_index = kwargs.get("begin_column_index")
+    (begin_row_index,begin_column_index,end_row_index,end_column_index) = __import_table_data_into_workbook(worksheet.cells , data , begin_row_index,begin_column_index,is_vertical) 
+    
+    return  worksheet.Cells.create_range(begin_row_index,begin_column_index,end_row_index - begin_row_index + 1 ,end_column_index - begin_column_index +1)
+
+def tuple_to_range(data : tuple , worksheet : Worksheet , **kwargs) -> Range :
+    """
+    import tuple data into worksheet.
+    :param tuple data:  (required)
+    :param Worksheet worksheet: . (required)
+    :param int begin_row_index: The row index of worksheet indicating the position in the imported data workbook. If the index is None, the default index is 0. (optional)
+    :param int begin_column_index: The column index of worksheet indicating the position in the imported data workbook. If the index is None, the default index is 0. (optional)
+    :param bool is_vertical: Indicate whether the data is inserted vertically. The default value is False. (optional)
+    :param bool only_ready: Indicate whether the data is only read data. The default value is True. (optional)
+    :return Worksheet: 
+    """      
+    is_vertical = False
+    if kwargs.get("is_vertical") is not None:
+        is_vertical = kwargs.get("is_vertical")
+    only_ready = True
+    if kwargs.get("only_ready") is not None:
+        only_ready = kwargs.get("only_ready")        
+    begin_row_index = 0
+    if kwargs.get("begin_row_index") is not None:
+        begin_row_index = kwargs.get("begin_row_index")
+    begin_column_index = 0
+    if kwargs.get("begin_column_index") is not None:
+        begin_column_index = kwargs.get("begin_column_index")
+    (begin_row_index,begin_column_index,end_row_index,end_column_index) = __import_table_data_into_workbook(worksheet.cells , data , begin_row_index,begin_column_index,is_vertical) 
+    
+    if only_ready :
+        worksheet.protect(ProtectionType.CONTENTS);
+        worksheet.protection.password = "";            
+        
+    return  worksheet.Cells.create_range(begin_row_index,begin_column_index,end_row_index - begin_row_index + 1 ,end_column_index - begin_column_index +1)
+
+def ndarray_to_range(data :  np.ndarray , worksheet : Worksheet , **kwargs) -> Range :
+    """
+    import ndarray data into worksheet.
+    :param ndarray data:  (required)
+    :param Worksheet worksheet: . (required)
+    :param int begin_row_index: The row index of worksheet indicating the position in the imported data workbook. If the index is None, the default index is 0. (optional)
+    :param int begin_column_index: The column index of worksheet indicating the position in the imported data workbook. If the index is None, the default index is 0. (optional)
+    :param bool is_vertical: Indicate whether the data is inserted vertically. The default value is False. (optional)
+    :param bool only_ready: Indicate whether the data is only read data. The default value is True. (optional)
+    :return Worksheet: 
+    """      
+    is_vertical = False
+    if kwargs.get("is_vertical") is not None:
+        is_vertical = kwargs.get("is_vertical")
+    only_ready = False
+    if kwargs.get("only_ready") is not None:
+        only_ready = kwargs.get("only_ready")        
+    begin_row_index = 0
+    if kwargs.get("begin_row_index") is not None:
+        begin_row_index = kwargs.get("begin_row_index")
+    begin_column_index = 0
+    if kwargs.get("begin_column_index") is not None:
+        begin_column_index = kwargs.get("begin_column_index")
+    (begin_row_index,begin_column_index,end_row_index,end_column_index) = __import_table_data_into_workbook(worksheet.cells , data , begin_row_index,begin_column_index,is_vertical) 
+    
+    if only_ready :
+        worksheet.protect(ProtectionType.CONTENTS);
+        worksheet.protection.password = "";            
+        
+    return  worksheet.Cells.create_range(begin_row_index,begin_column_index,end_row_index - begin_row_index + 1 ,end_column_index - begin_column_index +1)
+
+def dataframe_to_range(data :  pd.DataFrame , worksheet : Worksheet , **kwargs) -> Range :
+    """
+    import dataframe data into worksheet.
+    :param DataFrame data:  (required)
+    :param Worksheet worksheet: . (required)
+    :param int begin_row_index: The row index of worksheet indicating the position in the imported data workbook. If the index is None, the default index is 0. (optional)
+    :param int begin_column_index: The column index of worksheet indicating the position in the imported data workbook. If the index is None, the default index is 0. (optional)
+    :param bool is_vertical: Indicate whether the data is inserted vertically. The default value is False. (optional)
+    :param bool only_ready: Indicate whether the data is only read data. The default value is True. (optional)
+    :return Worksheet: 
+    """      
+    is_vertical = False
+    if kwargs.get("is_vertical") is not None:
+        is_vertical = kwargs.get("is_vertical")
+    begin_row_index = 0
+    if kwargs.get("begin_row_index") is not None:
+        begin_row_index = kwargs.get("begin_row_index")
+    begin_column_index = 0
+    if kwargs.get("begin_column_index") is not None:
+        begin_column_index = kwargs.get("begin_column_index")
+    cells = worksheet.cells
+    df_row_index = begin_row_index
+    df_column_index = begin_column_index
+    for column_name in data.columns:
+        df_row_index = begin_row_index
+        __put_value_to_cell(cells, column_name, df_row_index ,df_column_index + 1)
+        for df_value in data[column_name]:
+            __put_value_to_cell(cells, df_value, df_row_index + 1 ,df_column_index + 1)
+            df_row_index = df_row_index + 1
+        df_column_index = df_column_index + 1                
+    df_row_index = begin_row_index
+    df_column_index = begin_column_index
+    for df_row_name in  data.index.values:
+        __put_value_to_cell(cells, df_row_name, df_row_index + 1 ,df_column_index)
+        df_row_index = df_row_index + 1
+    return  worksheet.Cells.create_range(begin_row_index,begin_column_index,df_row_index - begin_row_index + 1 ,df_column_index - begin_column_index +1)
+
+def list_to_name(data : list , worksheet : Worksheet , **kwargs) -> Name :
+    """
+    import list data into worksheet.
+    :param list data:  (required)
+    :param Worksheet worksheet: . (required)
+    :param int begin_row_index: The row index of worksheet indicating the position in the imported data workbook. If the index is None, the default index is 0. (optional)
+    :param int begin_column_index: The column index of worksheet indicating the position in the imported data workbook. If the index is None, the default index is 0. (optional)
+    :param bool is_vertical: Indicate whether the data is inserted vertically. The default value is False. (optional)
+    :return Worksheet: 
+    """      
+    is_vertical = False
+    if kwargs.get("is_vertical") is not None:
+        is_vertical = kwargs.get("is_vertical")
+    begin_row_index = 0
+    if kwargs.get("begin_row_index") is not None:
+        begin_row_index = kwargs.get("begin_row_index")
+    begin_column_index = 0
+    if kwargs.get("begin_column_index") is not None:
+        begin_column_index = kwargs.get("begin_column_index")
+    (begin_row_index,begin_column_index,end_row_index,end_column_index) = __import_table_data_into_workbook(worksheet.cells , data , begin_row_index,begin_column_index,is_vertical) 
+    
+    return  worksheet.Cells.create_range(begin_row_index,begin_column_index,end_row_index - begin_row_index + 1 ,end_column_index - begin_column_index +1)
+
+def tuple_to_name(data : tuple , worksheet : Worksheet , **kwargs) -> Name :
+    """
+    import tuple data into worksheet.
+    :param tuple data:  (required)
+    :param Worksheet worksheet: . (required)
+    :param int begin_row_index: The row index of worksheet indicating the position in the imported data workbook. If the index is None, the default index is 0. (optional)
+    :param int begin_column_index: The column index of worksheet indicating the position in the imported data workbook. If the index is None, the default index is 0. (optional)
+    :param bool is_vertical: Indicate whether the data is inserted vertically. The default value is False. (optional)
+    :param bool only_ready: Indicate whether the data is only read data. The default value is True. (optional)
+    :return Worksheet: 
+    """      
+    is_vertical = False
+    if kwargs.get("is_vertical") is not None:
+        is_vertical = kwargs.get("is_vertical")
+    only_ready = True
+    if kwargs.get("only_ready") is not None:
+        only_ready = kwargs.get("only_ready")        
+    begin_row_index = 0
+    if kwargs.get("begin_row_index") is not None:
+        begin_row_index = kwargs.get("begin_row_index")
+    begin_column_index = 0
+    if kwargs.get("begin_column_index") is not None:
+        begin_column_index = kwargs.get("begin_column_index")
+    (begin_row_index,begin_column_index,end_row_index,end_column_index) = __import_table_data_into_workbook(worksheet.cells , data , begin_row_index,begin_column_index,is_vertical) 
+    
+    if only_ready :
+        worksheet.protect(ProtectionType.CONTENTS);
+        worksheet.protection.password = "";            
+        
+    return  worksheet.Cells.create_range(begin_row_index,begin_column_index,end_row_index - begin_row_index + 1 ,end_column_index - begin_column_index +1)
+
+def ndarray_to_name(data :  np.ndarray , worksheet : Worksheet , **kwargs) -> Name :
+    """
+    import ndarray data into worksheet.
+    :param ndarray data:  (required)
+    :param Worksheet worksheet: . (required)
+    :param int begin_row_index: The row index of worksheet indicating the position in the imported data workbook. If the index is None, the default index is 0. (optional)
+    :param int begin_column_index: The column index of worksheet indicating the position in the imported data workbook. If the index is None, the default index is 0. (optional)
+    :param bool is_vertical: Indicate whether the data is inserted vertically. The default value is False. (optional)
+    :param bool only_ready: Indicate whether the data is only read data. The default value is True. (optional)
+    :return Worksheet: 
+    """      
+    is_vertical = False
+    if kwargs.get("is_vertical") is not None:
+        is_vertical = kwargs.get("is_vertical")
+    only_ready = False
+    if kwargs.get("only_ready") is not None:
+        only_ready = kwargs.get("only_ready")        
+    begin_row_index = 0
+    if kwargs.get("begin_row_index") is not None:
+        begin_row_index = kwargs.get("begin_row_index")
+    begin_column_index = 0
+    if kwargs.get("begin_column_index") is not None:
+        begin_column_index = kwargs.get("begin_column_index")
+    (begin_row_index,begin_column_index,end_row_index,end_column_index) = __import_table_data_into_workbook(worksheet.cells , data , begin_row_index,begin_column_index,is_vertical) 
+    
+    if only_ready :
+        worksheet.protect(ProtectionType.CONTENTS);
+        worksheet.protection.password = "";            
+        
+    return  worksheet.Cells.create_range(begin_row_index,begin_column_index,end_row_index - begin_row_index + 1 ,end_column_index - begin_column_index +1)
+
+def dataframe_to_name(data :  pd.DataFrame , worksheet : Worksheet , **kwargs) -> Name :
+    """
+    import dataframe data into worksheet.
+    :param DataFrame data:  (required)
+    :param Worksheet worksheet: . (required)
+    :param int begin_row_index: The row index of worksheet indicating the position in the imported data workbook. If the index is None, the default index is 0. (optional)
+    :param int begin_column_index: The column index of worksheet indicating the position in the imported data workbook. If the index is None, the default index is 0. (optional)
+    :param bool is_vertical: Indicate whether the data is inserted vertically. The default value is False. (optional)
+    :param bool only_ready: Indicate whether the data is only read data. The default value is True. (optional)
+    :return Worksheet: 
+    """      
+    is_vertical = False
+    if kwargs.get("is_vertical") is not None:
+        is_vertical = kwargs.get("is_vertical")
+    begin_row_index = 0
+    if kwargs.get("begin_row_index") is not None:
+        begin_row_index = kwargs.get("begin_row_index")
+    begin_column_index = 0
+    if kwargs.get("begin_column_index") is not None:
+        begin_column_index = kwargs.get("begin_column_index")
+    cells = worksheet.cells
+    df_row_index = begin_row_index
+    df_column_index = begin_column_index
+    for column_name in data.columns:
+        df_row_index = begin_row_index
+        __put_value_to_cell(cells, column_name, df_row_index ,df_column_index + 1)
+        for df_value in data[column_name]:
+            __put_value_to_cell(cells, df_value, df_row_index + 1 ,df_column_index + 1)
+            df_row_index = df_row_index + 1
+        df_column_index = df_column_index + 1                
+    df_row_index = begin_row_index
+    df_column_index = begin_column_index
+    for df_row_name in  data.index.values:
+        __put_value_to_cell(cells, df_row_name, df_row_index + 1 ,df_column_index)
+        df_row_index = df_row_index + 1
+    return  worksheet.Cells.create_range(begin_row_index,begin_column_index,df_row_index - begin_row_index + 1 ,df_column_index - begin_column_index +1)
+
 def list_to_list_object(data : list , worksheet : Worksheet , **kwargs) -> ListObject :
     """
     create list object with list data on the worksheet.
@@ -333,13 +569,14 @@ def list_to_list_object(data : list , worksheet : Worksheet , **kwargs) -> ListO
         is_vertical = kwargs.get("is_vertical")
     begin_row_index = 0
     if kwargs.get("begin_row_index") is not None:
-        begin_row_index = kwargs.get("row_index")
+        begin_row_index = kwargs.get("begin_row_index")
     begin_column_index = 0
     if kwargs.get("begin_column_index") is not None:
         begin_column_index = kwargs.get("begin_column_index")
     (begin_row_index,begin_column_index,end_row_index,end_column_index) = __import_table_data_into_workbook(worksheet.cells , data , begin_row_index,begin_column_index,is_vertical) 
     index = worksheet.list_objects.add(begin_row_index,begin_column_index,end_row_index,end_column_index,False)
     return  worksheet.list_objects[index]
+    pass
 
 def tuple_to_list_object(data : tuple , worksheet : Worksheet , **kwargs) -> ListObject :
     """
@@ -360,19 +597,19 @@ def tuple_to_list_object(data : tuple , worksheet : Worksheet , **kwargs) -> Lis
         only_ready = kwargs.get("only_ready")        
     begin_row_index = 0
     if kwargs.get("begin_row_index") is not None:
-        begin_row_index = kwargs.get("row_index")
+        begin_row_index = kwargs.get("begin_row_index")
     begin_column_index = 0
     if kwargs.get("begin_column_index") is not None:
         begin_column_index = kwargs.get("begin_column_index")
     (begin_row_index,begin_column_index,end_row_index,end_column_index) = __import_table_data_into_workbook(worksheet.cells , data , begin_row_index,begin_column_index,is_vertical) 
     
     if only_ready :
-        worksheet.protect(ProtectionType.Contents);
+        worksheet.protect(ProtectionType.CONTENTS);
         worksheet.protection.password = "";            
     index = worksheet.list_objects.add(begin_row_index,begin_column_index,end_row_index,end_column_index,True)
     return  worksheet.list_objects[index]     
 
-def ndarray_to_worksheet(data :  np.ndarray , worksheet : Worksheet , **kwargs) -> ListObject :
+def ndarray_to_list_object(data :  np.ndarray , worksheet : Worksheet , **kwargs) -> ListObject :
     """
     create list object with ndarray data on the worksheet.
     :param ndarray data:  (required)
@@ -391,7 +628,7 @@ def ndarray_to_worksheet(data :  np.ndarray , worksheet : Worksheet , **kwargs) 
         only_ready = kwargs.get("only_ready")        
     begin_row_index = 0
     if kwargs.get("begin_row_index") is not None:
-        begin_row_index = kwargs.get("row_index")
+        begin_row_index = kwargs.get("begin_row_index")
     begin_column_index = 0
     if kwargs.get("begin_column_index") is not None:
         begin_column_index = kwargs.get("begin_column_index")
@@ -416,7 +653,7 @@ def dataframe_to_list_object(data :  pd.DataFrame , worksheet : Worksheet , **kw
         is_vertical = kwargs.get("is_vertical")
     begin_row_index = 0
     if kwargs.get("begin_row_index") is not None:
-        begin_row_index = kwargs.get("row_index")
+        begin_row_index = kwargs.get("begin_row_index")
     begin_column_index = 0
     if kwargs.get("begin_column_index") is not None:
         begin_column_index = kwargs.get("begin_column_index")
@@ -438,8 +675,6 @@ def dataframe_to_list_object(data :  pd.DataFrame , worksheet : Worksheet , **kw
     index = worksheet.list_objects.add(begin_row_index,begin_column_index,df_row_index,df_column_index,True)
         
     return  worksheet.list_objects[index]
-
-
 
 def __get_dataframe( cells : Cells , begin_row_index : int , begin_column_index : int , end_row_index : int , end_column_index : int , has_header: bool, has_total : bool):
     column_title_list =[]
@@ -490,8 +725,11 @@ def __has_table_header( cells: Cells, begin_row_index :int, begin_column_index:i
 def __import_table_data_into_workbook(cells,table_data,row_index,column_index,is_vertical):
     table_row_index = row_index
     table_column_index = column_index
+    row_count = len( table_data)
+    column_count = 0
     for table_row in table_data:
         for table_cell in table_row:
+            column_count =len( table_row)
             __put_value_to_cell(cells,table_cell,table_row_index,table_column_index)
             if is_vertical :
                 table_row_index = table_row_index + 1
@@ -502,8 +740,16 @@ def __import_table_data_into_workbook(cells,table_data,row_index,column_index,is
             table_column_index = table_column_index + 1
         else:
             table_column_index = column_index
-            table_row_index = table_row_index + 1                   
-    return (row_index,column_index,table_row_index,table_column_index)
+            table_row_index = table_row_index + 1         
+            
+    if is_vertical :
+        end_row_index = row_index + row_count - 1
+        end_column_index = table_column_index - 1
+    else:
+        end_row_index = table_row_index - 1
+        end_column_index = column_index + column_count - 1
+    
+    return (row_index,column_index,end_row_index,end_column_index)
 
 def __put_value_to_cell( cells, raw_value, row , column):
     cell = cells.get(row , column)

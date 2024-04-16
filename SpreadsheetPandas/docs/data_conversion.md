@@ -6,5 +6,3 @@ Spreadsheet Pandas provides many functions for converting data objects between A
 ## Data Conversion between Aspose.Cells and Pandas
 
 
-## Data Conversion between Aspose.Cells and Python 
-
