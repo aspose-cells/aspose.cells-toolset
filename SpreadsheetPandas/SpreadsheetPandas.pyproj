@@ -23,6 +23,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="spreadsheetpandas\data_conversion.py" />
+    <Compile Include="spreadsheetpandas\data_manipulation.py" />
     <Compile Include="spreadsheetpandas\internal\SpreadsheetPandas.py" />
     <Compile Include="spreadsheetpandas\spreadsheet_pandas.py" />
     <Compile Include="spreadsheetpandas\__init__.py" />

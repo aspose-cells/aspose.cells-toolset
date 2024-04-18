@@ -2,7 +2,6 @@
     Data Conversion
 """
 
-from _pytest.junitxml import Tuple
 from aspose.cells import Workbook
 from aspose.cells import Worksheet
 from aspose.cells import Cells
