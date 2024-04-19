@@ -24,7 +24,7 @@ def pivot_column( table: ListObject , pivot_column: str , value_column:str , agg
     :param str aggregation:  (required)
     :return list: 
     """
-
+    # 1.
     cells = table.data_range.worksheet.cells
     pivot_column_index = 0
     value_column_index = 0
@@ -44,7 +44,7 @@ def pivot_column( table: ListObject , pivot_column: str , value_column:str , agg
     table_data_end_row_index =  table.data_range.first_row  +  table.data_range.row_count
     table_data_begin_column_index =  table.data_range.first_column  
     table_data_end_column_index =  table.data_range.first_column  +  table.data_range.column_count
-
+    # 2.
     for row_index in range( table_data_begin_row_index, table_data_end_row_index):
         cur_pivot_column_value = None
         cur_value_column_value = None
@@ -72,6 +72,8 @@ def pivot_column( table: ListObject , pivot_column: str , value_column:str , agg
                         cur_row = cur_row[cell_value]                             
                 
         cur_row[cur_pivot_column_value] = cur_value_column_value
+    #3.
+    
     return table_rows
   
     

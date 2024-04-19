@@ -25,13 +25,19 @@ class TestBaseInfo( unittest.TestCase):
     
     def tearDown(self):
         pass
-
-    def test_list_unique(self):
-        header =["A","Product","Year", "Sales" ]
-        source = [["up","iphone","2012",122],["up","ipad","2012",122],["up","iphone","2013",122] ,["up","ipad","2013",120],["down","iphone","2012",122],["down","ipad","2012",122],["down","iphone","2013",122] ,["down","ipad","2013",120]]
-        source.insert(0,header)
-        print( source)
+    def test_dict_out(self):
+        table = {'up': {'iphone': {'2012': 122, '2013': 122}, 'ipad': {'2012': 122, '2013': 120}}, 'down': {'iphone': {'2012': 122, '2013': 122}, 'ipad': {'2012': 122, '2013': 120}}}
+        for firstcell in table:
+            for  second in table[firstcell]:
+                print(firstcell, second ,table[firstcell][second])
+    def _sl_(self , rows:dict, row :list ,table:list) ->list:
         pass
+    # def test_list_unique(self):
+    #     header =["A","Product","Year", "Sales" ]
+    #     source = [["up","iphone","2012",122],["up","ipad","2012",122],["up","iphone","2013",122] ,["up","ipad","2013",120],["down","iphone","2012",122],["down","ipad","2012",122],["down","iphone","2013",122] ,["down","ipad","2013",120]]
+    #     source.insert(0,header)
+    #     print( source)
+    #     pass
     # def test_base_info_table(self):
     #     workbook = Workbook("/home/cells/Projects/cells-toolset/TestData/Input/BookTableData.xlsx")
     #     print("===============")
