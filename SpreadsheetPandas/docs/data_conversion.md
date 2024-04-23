@@ -14,7 +14,7 @@ from aspose.cells import Workbook
 
 workbook = Workbook("BookTableData.xlsx")
 worksheet = workbook.worksheets.get("SaleSheet")
-                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+
 ```
 
 ## How to obtain a list object from an Excel file
@@ -203,7 +203,4 @@ worksheet = workbook.worksheets.get("SaleSheet")
 list_to_name(list_data,worksheet)
 
 ```
-
-
-
 
