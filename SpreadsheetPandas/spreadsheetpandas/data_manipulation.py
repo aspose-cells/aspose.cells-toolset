@@ -82,6 +82,47 @@ def pivot_column( table: ListObject , pivot_column: str , value_column:str , agg
     __dict_to_list__(table_rows,row,result,0, len(table.list_columns) - 2 ,column_value_list )
     return result
   
+def unpivot_column( table: ListObject ,column_names : list , column_map_name : str , value_map_name :str ) ->list:
+    
+    #1. get basic data.
+    rows = [] 
+    cells = table.data_range.worksheet.cells    
+    column_name_map_column_index = {}
+    cur_column_index = 0
+    row_head = []
+    for column in table.list_columns :
+        if column.name in column_names :
+            column_name_map_column_index[cur_column_index] = column.name
+        else :
+            row_head.append( column.name)
+        cur_column_index = cur_column_index + 1
+    row_head.append( column_map_name )
+    row_head.append( value_map_name )
+    rows.append(row_head)
+    table_data_begin_row_index =  table.data_range.first_row 
+    table_data_end_row_index =  table.data_range.first_row  +  table.data_range.row_count
+    table_data_begin_column_index =  table.data_range.first_column  
+    table_data_end_column_index =  table.data_range.first_column  +  table.data_range.column_count
+    # 2. table to dict
+
+    #2. 
+    for row_index in range( table_data_begin_row_index, table_data_end_row_index): 
+        row = []
+        column_value_list = []
+        for column_index in range(table_data_begin_column_index ,table_data_end_column_index ):
+            if column_index in column_name_map_column_index :
+                column_value_list.append ( [ column_name_map_column_index[column_index] , cells[row_index,column_index].value])
+            else:
+                row.append(cells[row_index,column_index].value)
+        
+        for fields in column_value_list:
+            new_row = row.copy()
+            new_row.append(fields[0])
+            new_row.append(fields[1])
+            rows.append(new_row)
+
+    return rows
+
 def __dict_to_list__(dict_data :dict, row :list, result : list, cur_level: int , deep_level :int, value_map_column_list :list  ) :    
     if cur_level == deep_level:
         new_row = row.copy()
@@ -99,3 +140,4 @@ def __dict_to_list__(dict_data :dict, row :list, result : list, cur_level: int ,
             print(cur_level , new_row)
             __dict_to_list__(dict_data[key],new_row ,result, cur_level +1 ,deep_level,value_map_column_list)    
     pass
+
