@@ -157,7 +157,11 @@ def __get_data_to_dataframe( cells : Cells , begin_row_index : int , begin_colum
         row_index = begin_row_index
     for column_index in range(begin_column_index , end_column_index + 1 ):
         if has_header :
-            column_title_list.append (cells.get(row_index,column_index).display_string_value )
+            cur_cell = cells.check_cell(row_index,column_index)
+            if cur_cell == None :
+                column_title_list.append( cells_helper.column_index_to_name(column_index))
+            else:
+                column_title_list.append( cur_cell.display_string_value )            
         else:
             column_title_list.append (cells_helper.column_index_to_name(column_index) )                       
 
@@ -178,7 +182,11 @@ def __get_data_to_dataframe( cells : Cells , begin_row_index : int , begin_colum
     for column_index in range(begin_column_index , end_column_index + 1 ):
         column_data = []
         for row_index in range(start_row ,end_row ):
-            column_data.append(cells.get(row_index,column_index).value)
+            cur_cell = cells.check_cell(row_index,column_index)
+            if cur_cell == None :
+                column_data.append( "")
+            else:
+                column_data.append( cur_cell.value )      
         data[column_title_list[position]] = column_data
         position = position + 1
         
@@ -186,12 +194,18 @@ def __get_data_to_dataframe( cells : Cells , begin_row_index : int , begin_colum
 def __has_table_header( cells: Cells, begin_row_index :int, begin_column_index:int, end_row_index :int, end_column_index:int ):
     has_header = True
     for column_index in range(begin_column_index , end_column_index +1) :
-        cell = cells.get(begin_row_index,column_index)
-        if cell.type != CellValueType.IS_STRING :
+        
+        cur_cell = cells.check_cell(begin_row_index,column_index)
+        if cur_cell == None:
             has_header = False
             break
-        sen_cell = cells.get(begin_row_index+1,column_index)
-        if cell.type != sen_cell.type :
+        if cur_cell.type != CellValueType.IS_STRING :
+            has_header = False
+            break
+        sen_cell = cells.check_cell(begin_row_index+1,column_index)
+        if sen_cell == None:
+            break
+        if cur_cell.type != sen_cell.type :
             break
     return has_header
     pass        
@@ -203,14 +217,21 @@ def __get_chart_data_to_dataframe( workbook : Workbook, sheet_index : int , char
     column_index  = series[2]
     column_data = []
     for row_index in range (series[1],series[3] +1):
-        column_data.append(cells.get(row_index , column_index).value)
+        cur_cell =  cells.check_cell(row_index , column_index)
+        if cur_cell == None:
+            column_data.append("")
+        else:
+            column_data.append(cur_cell.value)
     
     xName = ""
-    if cells.get(series[1] -1  , column_index).type == CellValueType.IS_NULL :
+    cur_cell = cells.check_cell(series[1] -1  , column_index)
+    if cur_cell == None :
         xName = CellsHelper.column_index_to_name(series[1])
-        
     else:
-        xName = cells.get(series[1] -1  , column_index).value
+        if cur_cell.type == CellValueType.IS_NULL :
+            xName = CellsHelper.column_index_to_name(series[1])        
+        else:
+            xName = cur_cell.value
         
     data[xName] = column_data
     yNames = []
@@ -218,7 +239,11 @@ def __get_chart_data_to_dataframe( workbook : Workbook, sheet_index : int , char
         values = __parse_data_source( chart.n_series[index].values)
         values_data = []
         for row_index in range (values[1],values[3] +1):
-            values_data.append(cells.get(row_index , column_index + index + 1).value)
+            cur_cell = cells.check_cell(row_index , column_index + index + 1)
+            if cur_cell is None:
+                values_data.append("")
+            else:
+                values_data.append(cur_cell.value)
         data[chart.n_series[index].display_name] = values_data
         yNames.append(chart.n_series[index].display_name)
     return pd.DataFrame(data)            

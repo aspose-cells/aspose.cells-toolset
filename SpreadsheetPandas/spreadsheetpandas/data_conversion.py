@@ -2,6 +2,7 @@
     Data Conversion
 """
 
+from tkinter import W
 from aspose.cells import Workbook
 from aspose.cells import Worksheet
 from aspose.cells import Cells
@@ -28,7 +29,9 @@ def worksheet_to_list( worksheet : Worksheet ) ->list:
     for row_index in range(0,max_row_index):
         row  =[]            
         for column_index in range(0,max_column_index):
-            row.append(  worksheet.cells.get(row_index,column_index).value)
+            cur_cell = worksheet.cells.check_cell(row_index,column_index)
+            if cur_cell != None:
+                row.append( cur_cell.value)
         table.append(row)
     return table    
 
@@ -44,9 +47,11 @@ def worksheet_to_tuple( worksheet : Worksheet ) -> tuple:
     for row_index in range(0,max_row_index):
         row  = []           
         for column_index in range(0,max_column_index):
-            row.append(  worksheet.cells.get(row_index,column_index).value)
+            cur_cell = worksheet.cells.check_cell(row_index,column_index)
+            if cur_cell != None:
+                row.append( cur_cell.value)
         table.append(row)
-    return tuple( table)    
+    return tuple(table)    
 
 def worksheet_to_ndarray( worksheet : Worksheet ) -> np.ndarray:
     """
@@ -63,10 +68,14 @@ def worksheet_to_ndarray( worksheet : Worksheet ) -> np.ndarray:
     for row_index in range(0,max_row_index):
         row  = []            
         for column_index in range(0,max_column_index):
-            if worksheet.cells.get(row_index,column_index).type == CellValueType.IS_NUMERIC:
-                row.append(  worksheet.cells.get(row_index,column_index).value)
-            else :
+            cur_cell = worksheet.cells.check_cell(row_index,column_index)
+            if cur_cell == None:
                 row.append(0)
+            else:
+                if cur_cell.type == CellValueType.IS_NUMERIC:
+                    row.append(cur_cell.value)
+                else :
+                    row.append(0)
         table.append(row)
     return np.asarray(table)
 
@@ -91,8 +100,12 @@ def list_object_to_list( list_object : ListObject ) ->list:
     table =[]
     for row_index in range(list_object.start_row , list_object.end_row + 1):
         row  =[]            
-        for column_index in range(list_object.start_column, list_object.end_column + 1):
-            row.append(  cells.get(row_index,column_index).value)
+        for column_index in range(list_object.start_column, list_object.end_column + 1):            
+            cur_cell = cells.check_cell(row_index,column_index)
+            if cur_cell == None:
+                row.append( "")
+            else:
+                row.append(cur_cell.value)
         table.append(row)
     return table   
 
@@ -107,7 +120,11 @@ def list_object_to_tuple( list_object : ListObject ) -> tuple:
     for row_index in range(list_object.start_row , list_object.end_row + 1):
         row  = []            
         for column_index in range(list_object.start_column, list_object.end_column + 1):
-            row.append(  cells.get(row_index,column_index).value)
+            cur_cell = cells.check_cell(row_index,column_index)
+            if cur_cell == None:
+                row.append( "")
+            else:
+                row.append(cur_cell.value)
         table.append(row)
     return tuple(table)   
 
@@ -119,13 +136,17 @@ def list_object_to_ndarray(list_object : ListObject ) -> np.ndarray:
     """   
     cells = list_object.data_range.worksheet.cells
     table =[]
-    for row_index in range(list_object.data_range.first_row , list_object.end_row +1):    
+    for row_index in range(list_object.data_range.first_row , list_object.end_row + 1 ):    
         row  = []
-        for column_index in range(list_object.start_column, list_object.end_column +1):
-            if   cells.get(row_index,column_index).type ==  CellValueType.IS_NUMERIC :
-                row.append(  cells.get(row_index,column_index).value)
-            else :
-                row.append( 0)
+        for column_index in range(list_object.start_column, list_object.end_column + 1 ):
+            cur_cell = cells.check_cell(row_index,column_index)
+            if cur_cell == None:
+                row.append(0)
+            else:
+                if cur_cell.type == CellValueType.IS_NUMERIC:
+                    row.append(cur_cell.value)
+                else :
+                    row.append(0)            
         table.append(row)
     return np.asarray( table )
 
@@ -150,7 +171,11 @@ def range_to_list( range_name : Range ) ->list:
     for row_index in range(range_name.first_row , range_name.first_row + range_name.row_count ):
         row  =[]            
         for column_index in range(range_name.first_column, range_name.first_column + range_name.column_count):
-            row.append(  cells.get(row_index,column_index).value)
+            cur_cell = cells.check_cell(row_index,column_index)
+            if cur_cell == None:
+                row.append( "")
+            else:
+                row.append(cur_cell.value)
         table.append(row)
     return table   
 
@@ -165,7 +190,11 @@ def range_to_tuple(  range_name : Range  ) -> tuple:
     for row_index in range(range_name.first_row , range_name.first_row + range_name.row_count ):
         row  =[]      
         for column_index in range(range_name.first_column, range_name.first_column + range_name.column_count ):
-            row.append(  cells.get(row_index,column_index).value)
+            cur_cell = cells.check_cell(row_index,column_index)
+            if cur_cell == None:
+                row.append( "")
+            else:
+                row.append(cur_cell.value)
         table.append(row)
     return  tuple (table)
 
@@ -180,10 +209,14 @@ def range_to_ndarray( range_name : Range  ) -> np.ndarray:
     for row_index in range(range_name.first_row , range_name.first_row + range_name.row_count ):
         row  = []       
         for column_index in range(range_name.first_column, range_name.first_column + range_name.column_count ):
-            if cells.get(row_index,column_index).type == CellValueType.IS_NUMERIC :
-                row.append(  cells.get(row_index,column_index).value)
-            else:
+            cur_cell = cells.check_cell(row_index,column_index)
+            if cur_cell == None:
                 row.append(0)
+            else:
+                if cur_cell.type == CellValueType.IS_NUMERIC:
+                    row.append(cur_cell.value)
+                else :
+                    row.append(0)            
         table.append(row)
     return np.asarray( table)
 
@@ -209,7 +242,11 @@ def name_to_list( name : Name ) ->list:
     for row_index in range(range_name.first_row , range_name.first_row + range_name.row_count ):
         row  =[]            
         for column_index in range(range_name.first_column, range_name.first_column + range_name.column_count):
-            row.append(  cells.get(row_index,column_index).value)
+            cur_cell = cells.check_cell(row_index,column_index)
+            if cur_cell == None:
+                row.append( "")
+            else:
+                row.append(cur_cell.value)
         table.append(row)
     return table   
 
@@ -225,7 +262,11 @@ def name_to_tuple( name : Name  ) -> tuple:
     for row_index in range(range_name.first_row , range_name.first_row + range_name.row_count ):
         row  =[]      
         for column_index in range(range_name.first_column, range_name.first_column + range_name.column_count ):
-            row.append(  cells.get(row_index,column_index).value)
+            cur_cell = cells.check_cell(row_index,column_index)
+            if cur_cell == None:
+                row.append( "")
+            else:
+                row.append(cur_cell.value)
         table.append(row)
     return  tuple (table)
 
@@ -241,10 +282,14 @@ def name_to_ndarray( name : Name ) -> np.ndarray:
     for row_index in range(range_name.first_row , range_name.first_row + range_name.row_count ):
         row  = []       
         for column_index in range(range_name.first_column, range_name.first_column + range_name.column_count ):
-            if cells.get(row_index,column_index).type == CellValueType.IS_NUMERIC :
-                row.append(  cells.get(row_index,column_index).value)
-            else:
+            cur_cell = cells.check_cell(row_index,column_index)
+            if cur_cell == None:
                 row.append(0)
+            else:
+                if cur_cell.type == CellValueType.IS_NUMERIC:
+                    row.append(cur_cell.value)
+                else :
+                    row.append(0)
         table.append(row)
     return np.asarray( table)
 

@@ -59,7 +59,7 @@ def pivot_column( table: ListObject , pivot_column: str , value_column:str , agg
             elif column_index == value_column_index :
                 cur_value_column_value = cells[row_index,column_index].value
             else:        
-                cell_value = cells[row_index,column_index].value
+                cell_value = cells.get(row_index,column_index).value
                 if IsFirstCell == True :                           
                     if  cell_value in  table_rows:
                         cur_row = table_rows[cell_value]
@@ -79,7 +79,7 @@ def pivot_column( table: ListObject , pivot_column: str , value_column:str , agg
     column_value_list = sorted( list(column_value_dict.keys())) 
     result =[]
     row = []
-    __dict_to_list__(table_rows,row,result,0, len(ListObject.list_columns)-2,column_value_list )
+    __dict_to_list__(table_rows,row,result,0, len(table.list_columns) - 2 ,column_value_list )
     return result
   
 def __dict_to_list__(dict_data :dict, row :list, result : list, cur_level: int , deep_level :int, value_map_column_list :list  ) :    

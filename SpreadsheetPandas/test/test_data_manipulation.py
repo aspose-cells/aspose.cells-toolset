@@ -27,9 +27,9 @@ class TestDataManipulation( unittest.TestCase):
         pass
 
     def test_pivot_column(self):
-        workbook = Workbook("BookTableW2L.xlsx")
+        workbook = Workbook("../TestData/Input/BookTableW2L.xlsx")
         table =  workbook.worksheets[0].list_objects[0]
-        pivot_column( table ,"Date", "Value")
+        pivot_column( table ,"Date", "Value","")
         pass
 
 if __name__ == '__main__':
