@@ -32,7 +32,7 @@ class TestBaseInfo( unittest.TestCase):
         value_map_column = {"2011":0,"2012":1, "2013":2}
         value_map_column_list = ["2011","2012", "2013"]
         self._sl_(table, row,new_table,0,2,value_map_column)
-        print(new_table)
+        # print(new_table)
         # for firstcell in table:
         #     for  second in table[firstcell]:
         #         for third in table[firstcell][second]:
@@ -54,7 +54,7 @@ class TestBaseInfo( unittest.TestCase):
             for  key in  dict_data :                
                 new_row = row.copy()
                 new_row.append (key)
-                print(cur_level , new_row)
+                # print(cur_level , new_row)
                 self._sl_(dict_data[key],new_row ,result, cur_level +1 ,deep_level,value_map_column_list)
 
             

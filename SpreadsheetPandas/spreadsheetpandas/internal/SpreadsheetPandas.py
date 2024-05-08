@@ -146,7 +146,6 @@ class SpreadsheetPandas(object):
         dtype = type(raw_value)
         match datatype:
             case "int64" :
-                print(raw_value.dtype)
                 value = int(raw_value)
             case "float64" :
                 value = float(raw_value)                

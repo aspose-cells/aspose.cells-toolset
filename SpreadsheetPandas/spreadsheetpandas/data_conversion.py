@@ -70,12 +70,13 @@ def worksheet_to_ndarray( worksheet : Worksheet ) -> np.ndarray:
         for column_index in range(0,max_column_index):
             cur_cell = worksheet.cells.check_cell(row_index,column_index)
             if cur_cell == None:
-                row.append(0)
+                row.append(None)
             else:
-                if cur_cell.type == CellValueType.IS_NUMERIC:
-                    row.append(cur_cell.value)
-                else :
-                    row.append(0)
+                row.append(cur_cell.value)
+                # if cur_cell.type == CellValueType.IS_NUMERIC:
+                #     row.append(cur_cell.value)
+                # else :
+                #     row.append(0)
         table.append(row)
     return np.asarray(table)
 
@@ -143,10 +144,11 @@ def list_object_to_ndarray(list_object : ListObject ) -> np.ndarray:
             if cur_cell == None:
                 row.append(0)
             else:
-                if cur_cell.type == CellValueType.IS_NUMERIC:
-                    row.append(cur_cell.value)
-                else :
-                    row.append(0)            
+                row.append(cur_cell.value)
+                # if cur_cell.type == CellValueType.IS_NUMERIC:
+                #     row.append(cur_cell.value)
+                # else :
+                #     row.append(0)            
         table.append(row)
     return np.asarray( table )
 
@@ -213,10 +215,11 @@ def range_to_ndarray( range_name : Range  ) -> np.ndarray:
             if cur_cell == None:
                 row.append(0)
             else:
-                if cur_cell.type == CellValueType.IS_NUMERIC:
-                    row.append(cur_cell.value)
-                else :
-                    row.append(0)            
+                row.append(cur_cell.value)
+                # if cur_cell.type == CellValueType.IS_NUMERIC:
+                #     row.append(cur_cell.value)
+                # else :
+                #     row.append(0)            
         table.append(row)
     return np.asarray( table)
 
@@ -286,10 +289,11 @@ def name_to_ndarray( name : Name ) -> np.ndarray:
             if cur_cell == None:
                 row.append(0)
             else:
-                if cur_cell.type == CellValueType.IS_NUMERIC:
-                    row.append(cur_cell.value)
-                else :
-                    row.append(0)
+                row.append(cur_cell.value)
+                # if cur_cell.type == CellValueType.IS_NUMERIC:
+                #     row.append(cur_cell.value)
+                # else :
+                #     row.append(0)
         table.append(row)
     return np.asarray( table)
 

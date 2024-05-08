@@ -13,20 +13,20 @@ import numpy as np
 import pandas as pd
 import re
 import os
-import io
+import io 
 import requests
 
 def read_spreadsheet( path: str , **kwargs )-> pd.DataFrame:
     if os.path.exists(path) :
         workbook = Workbook(path)
     else:
-        if str.startswith("https://") or  str.startswith("http://") :
-            response = requests.get('https://docs.aspose.cloud/cells/supported-file-formats/')
-            if response.status_code =="200" :
-                workbook = Workbook(io.BytesIO(response.content),LoadOptions(LoadFormat.HTML))
+        if path.startswith("https://") or  path.startswith("http://") :
+            response = requests.get(path)
+            if response.status_code == 200 :
+                workbook = Workbook(io.BytesIO(bytes(response.content)),LoadOptions(LoadFormat.HTML))
+                print( len(workbook.worksheets[0].list_objects))
                 pass
-            else:
-                print(response.content)
+            else:                
                 return pd.DataFrame()
         else :
             print( path + " no exists." )

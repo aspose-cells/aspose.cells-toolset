@@ -137,7 +137,6 @@ def __dict_to_list__(dict_data :dict, row :list, result : list, cur_level: int ,
         for  key in  dict_data :                
             new_row = row.copy()
             new_row.append (key)
-            print(cur_level , new_row)
             __dict_to_list__(dict_data[key],new_row ,result, cur_level +1 ,deep_level,value_map_column_list)    
     pass
 
