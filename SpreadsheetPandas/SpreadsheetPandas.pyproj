@@ -22,6 +22,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="examples\BlogDataAnalysis.py" />
     <Compile Include="spreadsheetpandas\data_conversion.py" />
     <Compile Include="spreadsheetpandas\data_manipulation.py" />
     <Compile Include="spreadsheetpandas\internal\row_content.py" />
