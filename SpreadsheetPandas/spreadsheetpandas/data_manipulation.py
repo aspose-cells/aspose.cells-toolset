@@ -1,7 +1,7 @@
 """
     Data Manipulation
 """
- 
+
 from aspose.cells import Workbook
 from aspose.cells import Worksheet
 from aspose.cells import Cells
@@ -284,6 +284,7 @@ def inner_join(
 
     return result
 
+
 def merge_table_with_appending_non_matching_rows(
     main_table: ListObject, lookup_main: ListObject, match_column: str
 ) -> list:
@@ -302,6 +303,7 @@ def merge_table_with_appending_non_matching_rows(
             result.append(lookup_row)
     return result
 
+
 def merge_table_with_appending_additional_matching_rows(
     main_table: ListObject, lookup_main: ListObject, match_column: str
 ) -> list:
@@ -314,7 +316,7 @@ def merge_table_with_appending_additional_matching_rows(
     """
     result = []
     main_table_data = list_object_to_list_dict(main_table)
-    lookup_main_data = list_object_to_list_dict(lookup_main)    
+    lookup_main_data = list_object_to_list_dict(lookup_main)
     key_dict = {}
     all_match_rows = {}
     main_table_len = len(main_table_data)
@@ -334,13 +336,83 @@ def merge_table_with_appending_additional_matching_rows(
                         all_match = False
                         break
                 if all_match:
-                    has_all_match = True    
+                    has_all_match = True
                 else:
                     match_rows.append(lookup_row)
                 match_row_index_list.append(lookup_row_index)
-        if has_all_match :
+        if has_all_match:
             result.extend(match_rows)
-    pass  
+        else:
+            match_rows_count = len(match_rows)
+            for position in range(0, match_rows_count):
+                if position == 0:
+                    main_table_data[main_row_index] = match_rows[position]
+                else:
+                    result.append(match_rows[position])
+
+        for position in range(len(match_row_index_list), 0):
+            lookup_main_data.remove(match_row_index_list[position - 1])
+    main_table_data.extend(lookup_main_data)
+    main_table_data.extend(result)
+
+    pass
+
+
+def merge_table_with_inserting_additional_matching_rows(
+    main_table: ListObject, lookup_main: ListObject, match_column: str
+) -> list:
+    """
+    Merge two tables with inserting additional matching rows.
+    :param ListObject main_table:  (required)
+    :param ListObject lookup_main:  (required)
+    :param str match_column:  (required)
+    :return list:
+    """
+    result = []
+    main_table_data = list_object_to_list_dict(main_table)
+    lookup_main_data = list_object_to_list_dict(lookup_main)
+    key_dict = {}
+    all_match_rows = {}
+    main_table_len = len(main_table_data)
+    lookup_table_len = len(lookup_main_data)
+    for main_row_index in range(main_table_len, 0):
+        main_row = main_table_data[main_row_index]
+        key_value = main_row[match_column]
+        match_rows = []
+        match_row_index_list = []
+        has_all_match = False
+        for lookup_row_index in range(0, lookup_table_len):
+            lookup_row = lookup_main_data[lookup_row_index]
+            if lookup_row[match_column] == key_value:
+                all_match = True
+                for column_name in main_row:
+                    if main_row[column_name] != lookup_row[column_name]:
+                        all_match = False
+                        break
+                if all_match:
+                    has_all_match = True
+                else:
+                    match_rows.append(lookup_row)
+                match_row_index_list.append(lookup_row_index)
+        if has_all_match:
+            if main_row_index == len( main_table_data) -1 :
+                main_table_data.extend(match_rows)
+            else:
+                main_table_data.insert(main_row_index + 1 , match_rows)
+        else:
+            match_rows_count = len(match_rows)
+            for position in range(0, match_rows_count):
+                if position == 0:
+                    main_table_data[main_row_index] = match_rows[position]
+                else:
+                    result.insert(main_row_index + 1 ,match_rows[position])
+
+        for position in range(len(match_row_index_list), 0):
+            lookup_main_data.remove(match_row_index_list[position - 1])
+    main_table_data.extend(lookup_main_data)
+    pass
+
+
 def __list_join_list(
     list1: list, list2: list, table1_field: str, table2_field: str
 ) -> list:

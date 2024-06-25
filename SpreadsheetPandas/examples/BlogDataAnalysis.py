@@ -111,6 +111,17 @@ dashboard_sheet.is_gridlines_visible = False
 workbook.worksheets.active_sheet_index = dashboard_sheet.index
 chartIndex = dashboard_sheet.charts.add( ChartType.LINE, "ProductMonthStat!$A$1:$B$147", True, 1, 0, 27, 14);
 column_index = 0
+row_index = 3
+dashboard_sheet.cells.get(row_index,20).put_value("Product") 
+dashboard_sheet.cells.get(row_index,21).put_value("SUM") 
+dashboard_sheet.cells.get(row_index,22).put_value("AVERAGE") 
+dashboard_sheet.cells.get(row_index,23).put_value("STDEV.P") 
+dashboard_sheet.cells.get(row_index,24).put_value("STDEV.S") 
+dashboard_sheet.cells.get(row_index,25).put_value("MIN") 
+dashboard_sheet.cells.get(row_index,26).put_value("MEDIAN") 
+dashboard_sheet.cells.get(row_index,27).put_value("MAX") 
+row_index = row_index + 1
+
 for column in products_month_stat_table.list_columns:
     if  column_index == 0: 
         column_index = column_index + 1
@@ -118,6 +129,16 @@ for column in products_month_stat_table.list_columns:
     dashboard_sheet.cells.get(28,column_index).put_value(column.name)
     dashboard_sheet.cells.set_column_width(column_index, 6.71);
     column_index = column_index + 1
+    dashboard_sheet.cells.get(row_index,20).put_value(column.name) 
+    dashboard_sheet.cells.get(row_index,21).formula = "=SUM({0}[{1}])".format(products_month_stat_table.display_name , column.name)
+    dashboard_sheet.cells.get(row_index,22).formula = "=AVERAGE({0}[{1}])".format(products_month_stat_table.display_name , column.name)
+    dashboard_sheet.cells.get(row_index,23).formula = "=STDEV.P({0}[{1}])".format(products_month_stat_table.display_name , column.name)
+    dashboard_sheet.cells.get(row_index,24).formula = "=STDEV.S({0}[{1}])".format(products_month_stat_table.display_name , column.name)
+    dashboard_sheet.cells.get(row_index,25).formula = "=MIN({0}[{1}])".format(products_month_stat_table.display_name , column.name)
+    dashboard_sheet.cells.get(row_index,26).formula = "=MEDIAN({0}[{1}])".format(products_month_stat_table.display_name , column.name)
+    dashboard_sheet.cells.get(row_index,27).formula = "=MAX({0}[{1}])".format(products_month_stat_table.display_name , column.name)
+    row_index = row_index + 1
+
 scrollBar =  dashboard_sheet.shapes.add_scroll_bar(29, 0, 0,50, 20,950);
 scrollBar.current_value = 0;
 scrollBar.min = 0;

@@ -25,6 +25,7 @@
     <Compile Include="examples\BlogDataAnalysis.py" />
     <Compile Include="spreadsheetpandas\data_conversion.py" />
     <Compile Include="spreadsheetpandas\data_manipulation.py" />
+    <Compile Include="spreadsheetpandas\data_statistics.py" />
     <Compile Include="spreadsheetpandas\internal\row_content.py" />
     <Compile Include="spreadsheetpandas\internal\SpreadsheetPandas.py" />
     <Compile Include="spreadsheetpandas\spreadsheet_pandas.py" />
@@ -32,6 +33,7 @@
     <Compile Include="test\run_test.py" />
     <Compile Include="test\test_base_info.py" />
     <Compile Include="test\test_data_conversion.py" />
+    <Compile Include="test\test_data_manipulation.py" />
     <Compile Include="test\test_spreadsheet_pandas.py" />
     <Compile Include="test\__init__.py" />
   </ItemGroup>
