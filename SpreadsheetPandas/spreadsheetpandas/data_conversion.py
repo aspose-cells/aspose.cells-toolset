@@ -119,6 +119,29 @@ def list_object_to_list(list_object: ListObject) -> list:
         table.append(row)
     return table
 
+def list_object_to_list_dict(list_object: ListObject) -> list:
+    """
+    Converts a ListObject object into a list of dictionaries.    
+    Each dictionary represents a row of data, with the key being the column name and the value being the cell value.
+    :param ListObject list_object: The ListObject object to be converted, containing worksheet data and column information.
+    :return: A list of dictionaries, each dictionary representing a row of data in the worksheet.
+    """
+    cells = list_object.data_range.worksheet.cells
+    table = []
+    column_names = []
+    for column in list_object.list_columns:
+        column_names.append(column.name)
+    for row_index in range(list_object.start_row, list_object.end_row + 1):
+        row = {}
+        for column_index in range(list_object.start_column, list_object.end_column + 1):
+            cur_cell = cells.check_cell(row_index, column_index)
+            if cur_cell == None:
+                row[column_names[column_index]] = ""
+            else:
+                row[column_names[column_index]] = cur_cell.value        
+        table.append(row)    
+    return table
+
 
 def list_object_to_tuple(list_object: ListObject) -> tuple:
     """
@@ -890,7 +913,47 @@ def dataframe_to_name(data: pd.DataFrame, worksheet: Worksheet, **kwargs) -> Nam
     name.refers_to = name_refers_to
     return name
 
+def list_dict_to_list_object(data: list, worksheet: Worksheet, **kwargs) -> ListObject:
+    """
+    create list object with list data on the worksheet.
+    :param list data:  (required)
+    :param Worksheet worksheet: . (required)
+    :param int begin_row_index: The row index of worksheet indicating the position in the imported data workbook. If the index is None, the default index is 0. (optional)
+    :param int begin_column_index: The column index of worksheet indicating the position in the imported data workbook. If the index is None, the default index is 0. (optional)
+    :param bool is_vertical: Indicate whether the data is inserted vertically. The default value is False. (optional)
+    :param bool has_table_header: Indicate whether has table header. The default value is True. (optional)
+    :return Worksheet:
+    """
+    is_vertical = False
+    if kwargs.get("is_vertical") is not None:
+        is_vertical = kwargs.get("is_vertical")
+    begin_row_index = 0
+    if kwargs.get("begin_row_index") is not None:
+        begin_row_index = kwargs.get("begin_row_index")
+    begin_column_index = 0
+    if kwargs.get("begin_column_index") is not None:
+        begin_column_index = kwargs.get("begin_column_index")
 
+    if len(data) == 0 :
+        return worksheet
+
+    cells = worksheet.cells
+    column_index = begin_column_index
+    row_index = begin_row_index 
+    row = data[0]
+    for column_name in row.keys():
+        __put_value_to_cell(cells, column_name , row_index, column_index)
+        column_index = column_index + 1
+    
+    for row in data:
+        column_index = begin_column_index
+        for column_name in row.keys():
+            __put_value_to_cell(cells, row[column_name] , row_index + 1, column_index)
+            column_index = column_index + 1
+        row_index = row_index + 1
+    index = worksheet.list_objects.add( CellsHelper.cell_index_to_name(begin_row_index, begin_column_index),CellsHelper.cell_index_to_name( row_index, column_index ) ,True)
+    return worksheet.list_objects[index]      
+    
 def list_to_list_object(data: list, worksheet: Worksheet, **kwargs) -> ListObject:
     """
     create list object with list data on the worksheet.

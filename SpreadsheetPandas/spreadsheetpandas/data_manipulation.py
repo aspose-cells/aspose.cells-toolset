@@ -1,7 +1,7 @@
 """
     Data Manipulation
 """
-
+ 
 from aspose.cells import Workbook
 from aspose.cells import Worksheet
 from aspose.cells import Cells
@@ -15,7 +15,7 @@ import pandas as pd
 
 from spreadsheetpandas.data_conversion import (
     list_object_to_list,
-    list_object_to_ndarray,
+    list_object_to_list_dict,
 )
 
 
@@ -284,7 +284,63 @@ def inner_join(
 
     return result
 
+def merge_table_with_appending_non_matching_rows(
+    main_table: ListObject, lookup_main: ListObject, match_column: str
+) -> list:
+    main_table_data = list_object_to_list_dict(main_table)
+    lookup_main_data = list_object_to_list_dict(lookup_main)
+    result = []
+    result.extend(main_table_data)
+    for lookup_row in lookup_main_data:
+        key_value = lookup_row[match_column]
+        is_match = False
+        for main_row in main_table_data:
+            if main_row[match_column] == key_value:
+                is_match = True
+                break
+        if not is_match:
+            result.append(lookup_row)
+    return result
 
+def merge_table_with_appending_additional_matching_rows(
+    main_table: ListObject, lookup_main: ListObject, match_column: str
+) -> list:
+    """
+    Merge two tables with appending additional matching rows.
+    :param ListObject main_table:  (required)
+    :param ListObject lookup_main:  (required)
+    :param str match_column:  (required)
+    :return list:
+    """
+    result = []
+    main_table_data = list_object_to_list_dict(main_table)
+    lookup_main_data = list_object_to_list_dict(lookup_main)    
+    key_dict = {}
+    all_match_rows = {}
+    main_table_len = len(main_table_data)
+    lookup_table_len = len(lookup_main_data)
+    for main_row_index in range(0, main_table_len):
+        main_row = main_table_data[main_row_index]
+        key_value = main_row[match_column]
+        match_rows = []
+        match_row_index_list = []
+        has_all_match = False
+        for lookup_row_index in range(0, lookup_table_len):
+            lookup_row = lookup_main_data[lookup_row_index]
+            if lookup_row[match_column] == key_value:
+                all_match = True
+                for column_name in main_row:
+                    if main_row[column_name] != lookup_row[column_name]:
+                        all_match = False
+                        break
+                if all_match:
+                    has_all_match = True    
+                else:
+                    match_rows.append(lookup_row)
+                match_row_index_list.append(lookup_row_index)
+        if has_all_match :
+            result.extend(match_rows)
+    pass  
 def __list_join_list(
     list1: list, list2: list, table1_field: str, table2_field: str
 ) -> list:
